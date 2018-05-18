@@ -8,7 +8,8 @@
      <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-
+     <!-- Font Awesome Free -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -23,150 +24,177 @@
         padding: 0;
 
       }
-
-      .info-content {
-        padding:5px 0;
+      #iw-container h6 {
+        margin: 5px 0;
       }
 
       .pac-item {
-        padding:; 3px 0;
+        padding: 2px 0;
       }
 
-/*      #description {
-        font-family: Roboto;
-        font-size: 15px;
-        font-weight: 300;
-      }
-
-      #infowindow-content .title {
-        font-weight: bold;
-      }
-
-      #infowindow-content {
-        display: none;
-      }
-
-      #map #infowindow-content {
-        display: inline;
-      }
-
-      .pac-card {
-        margin: 10px 10px 0 0;
-        border-radius: 2px 0 0 2px;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        outline: none;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        background-color: #fff;
-        font-family: Roboto;
-      }
-
-      #pac-container {
-        padding-bottom: 12px;
-        margin-right: 12px;
-      }
-
-      .pac-controls {
-        display: inline-block;
-        padding: 5px 11px;
-      }
-
-      .pac-controls label {
-        font-family: Roboto;
-        font-size: 13px;
-        font-weight: 300;
-      }
-
-      #pac-input {
-        background-color: #fff;
-        font-family: Roboto;
-        font-size: 15px;
-        font-weight: 300;
-        padding: 0 11px 0 13px;
-        text-overflow: ellipsis;
+      #share-button {
         width: 100%;
+        text-align: center;
       }
 
-      #pac-input:focus {
-        border-color: #4d90fe;
+      #share-button a {
+        width: 30px;
+          height: 30px;
+          display: inline-block;
+          margin: 0 4px;
+/*          border-radius: 50%;*/
+          font-size: 20px;
+          color: #fff;
+/*        opacity: 0.75;*/
+        transition: opacity 0.15s linear;
       }
 
-      #title {
-        color: #fff;
-        background-color: #4d90fe;
-        font-size: 25px;
-        font-weight: 500;
-        padding: 6px 12px;
+
+      #share-button a:hover {
+        opacity: 0.5;
       }
-      #target {
-        width: 345px;
+
+      /* icons */
+
+      #share-button i {
+          position: relative;
+          top: 47%;
+          transform: translateY(-50%);
       }
-*/
+
+      /* colors */
+
+
+      .whatsapp {
+        background: #00e676;
+      }
+
+      .facebook {
+        background: #3b5998;
+      }
+      
+      .telegram {
+        background: #0088cc;
+      }
 
     </style>
   </head>
   <body>
     <input id="pac-input" class="form-control" type="text" placeholder="搜尋餐廳">
-    <div id="screen-selector" data-role="navbar">
-      <button type="button" class="btn btn-outline-secondary btn-sm" id="mk-btn">旺角</button>
-      <button type="button" class="btn btn-outline-secondary btn-sm" id="tst-btn">尖沙咀</button>
-      <button type="button" class="btn btn-outline-secondary btn-sm" id="cwb-btn">銅鑼灣</button>
+    <div class="form-group row">
+      <label for="staticEmail" class="col-sm-1 col-form-label-sm">熱門地區</label>
+      <div class="col-sm-11" id="screen-selector">
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="kl-mk-btn">旺角</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="kl-pw-btn">太子</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="kl-tst-btn">尖沙咀</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="hk-wc-btn">灣仔</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="hk-cwb-btn">銅鑼灣</button>
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="nt-tw-btn">荃灣</button>
+      </div>
     </div>
-    <a href="whatsapp://send?text=Hello%20World!">Hello, world!</a>
-<a href="whatsapp://send" data-text="Take a look at this awesome website:" data-href="" class="wa_btn wa_btn_s" >Share</a>
     <div id="map"></div>
     <script>
       
       function initMap() {
         var hk = {lat: 22.3750568, lng: 114.1050191}; //{lat: 22.3750568, lng: 114.1050191}; 
         var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 12, // 12
+          zoom: 12, 
+          // minZoom: 11.5,
           center: hk,
           mapTypeControl: false,
-          streetViewControl: false
+          streetViewControl: false,
+          gestureHandling: "greedy"
         });
 
 
         // Load GeoJSON.
-        map.data.loadGeoJson('restaurant.json');
+        map.data.loadGeoJson('restaurant.json', null, function(features) {
+    
+            // group items / cluster
+            var infoWin = new google.maps.InfoWindow();
+            var markers = features.map(function(feature) {
+                var g = feature.getGeometry();
 
-        // Add some style.
-        map.data.setStyle({
-          icon: 'icon/soccer-ball.png'
+                var marker = new google.maps.Marker({
+                    'position': g.get(0),
+                    'data' : feature
+                });
+              google.maps.event.addListener(marker, 'click', function(evt) {
+                var info_name = marker.data.f.name;
+                var info_address = marker.data.f.address;
+                var info_phone = marker.data.f.phone;
+                var info_opening_hour = marker.data.f.opening_hour;
+                var info_play_schedule = marker.data.f.play_schedule;
+                var info_reservation = marker.data.f.reservation;
+                var info_min_charge = marker.data.f.min_charge;
+                var info_special_event = marker.data.f.special_event;
+                infoWin.setContent("<div id='iw-container'>"+
+                "<h6>"+info_name+"</h6>"+
+                  "<div class='info-content'>"+
+                  "<dl class='row'>"+
+                    "<dt class='col-sm-1'><i class='fas fa-map-marker-alt'></i></dt><dd class='col-sm-11'>"+info_address+"</dd>"+
+                    "<dt class='col-sm-1'><i class='fas fa-phone'></i></dt><dd class='col-sm-11'>"+info_phone+"</dd>"+
+                    "<dt class='col-sm-1'><i class='far fa-clock'></i></dt><dd class='col-sm-11'>"+info_opening_hour+"</dd>"+
+                  "</dl>"+
+                    info_play_schedule+"; "+
+                    info_reservation+"; "+
+                    info_min_charge+"; "+
+                    info_special_event+
+                  "</div>"+
+                  "<div id='share-button'>"+
+                    "<a class='whatsapp'  href='whatsapp://send?text="+info_address+"'>"+"<i class='fab fa-whatsapp'></i></a>"+
+                    "<a class='facebook' href='fb-messenger://share?text="+info_address+"'>"+"<i class='fab fa-facebook'></i></a>"+
+                    "<a class='telegram'  href='https://telegram.me/share/url?url=hk01data.github.io/worldcup2018-map&text="+info_address+"'>"+"<i class='fab fa-telegram'></i></a>"+
+                    "<a class='copy'  href='' onclick='copyToClipboard()'><i class='far fa-copy'></i></a>"+
+                  "</div>"+
+                "</div>");
+                infoWin.open(map, marker);
+              })
+                return marker;
+            });
+
+            // create a new marker cluster
+            var markerCluster = new MarkerClusterer(map, markers, {
+                imagePath: 'markerclusterer/m',
+                gridSize: 50,
+                maxZoom: 16, 
+                zoomOnClick: true,
+            });
+
+            // add event listener to the cluster
+            google.maps.event.addListener(markerCluster, 'clusterclick', function (cluster) {
+             // handle clickevent
+            });
+
         });
 
+            map.data.setStyle(function (feature) {
+            return { icon: feature.getProperty('icon'), visible: false };
+        });
+              
+        // map.data.setStyle({
+        //   icon: 'icon/soccer-ball.png'
+        // });
+          // bounds of the desired area
+          var bounds = new google.maps.LatLngBounds(
+            new google.maps.LatLng(22.152842, 113.831202),
+            new google.maps.LatLng(22.554093, 114.445288)
+            );
+
+          var lastValidCenter = map.getCenter();
+
+          map.addListener('center_changed', function() {
+            console.log("moved")
+              // if (bounds.contains(map.getCenter())) {
+              //     // still within valid bounds, so save the last valid position
+              //     lastValidCenter = map.getCenter();
+              //     return; 
+              // }
+              // not valid anymore => return to last valid position
+              map.panToBounds(bounds);
+          });
         // Set mouseover event for each feature.
 
-        var infowindow = new google.maps.InfoWindow();
-        map.data.addListener('click', function(event) {
-          var info_name = event.feature.getProperty("name");
-          var info_address = event.feature.getProperty("address");
-          var info_phone = event.feature.getProperty("phone");
-          var info_opening_hour = event.feature.getProperty("opening_hour");
-          var info_play_schedule = event.feature.getProperty("play_schedule");
-          var info_reservation = event.feature.getProperty("reservation");
-          var info_min_charge = event.feature.getProperty("min_charge");
-          var info_special_event = event.feature.getProperty("special_event");
-              infowindow.setContent("<div style='width:150px;'>"+
-                "<h6>"+info_name+"</h6>"+
-                "<a href='whatsapp://send?text="+info_address+"'>"+"New Share</a>"+
-                "<div class='info-content'>"+
-                info_address+"<br />"+
-                info_phone+"<br />"+
-                info_opening_hour+"<br />"+
-                info_play_schedule+"<br />"+
-                info_reservation+"<br />"+
-                info_min_charge+"<br />"+
-                info_special_event+"<br />"+
-                "</div>"+
-                "<a href='whatsapp://send' data-text='"+
-                info_address+
-                "' data-href='' class='wa_btn wa_btn_s'>Share</a>"+
-                "</div>");
-            infowindow.setPosition(event.feature.getGeometry().get());
-            infowindow.setOptions({pixelOffset: new google.maps.Size(0,-30)});
-            infowindow.open(map);
-          });
       // This example adds a search box to a map, using the Google Place Autocomplete
       // feature. People can enter geographical searches. The search box will return a
       // pick list containing a mix of places and predicted search terms.
@@ -180,9 +208,11 @@
         var searchBox = new google.maps.places.SearchBox(input);
 
         // Bias the SearchBox results towards current map's viewport.
-        map.addListener('bounds_changed', function() {
-          searchBox.setBounds(map.getBounds());
-        });
+        // map.addListener('bounds_changed', function() {
+        //   searchBox.setBounds(map.getBounds());
+        // });
+
+        searchBox.setBounds(bounds);
 
         var markers = [];
         // Listen for the event fired when the user selects a prediction and retrieve
@@ -200,8 +230,8 @@
           });
           markers = [];
 
+
           // For each place, get the icon, name and location.
-          var bounds = new google.maps.LatLngBounds();
           places.forEach(function(place) {
             if (!place.geometry) {
               console.log("Returned place contains no geometry");
@@ -265,9 +295,16 @@
             if (event.target !== event.currentTarget) {
                 var clickedItem = event.target.id;
                 console.log("Hello " + clickedItem);
-                if (clickedItem == "mk-btn") map.panTo({lat: 22.3750568, lng: 114.1050191});
-                if (clickedItem == "tst-btn") map.panTo({lat: 22.298683, lng: 114.171972});
-                if (clickedItem == "cwb-btn") map.panTo({lat: 22.280329, lng: 114.183900});
+                var temp_coord;
+                var temp_zoom = 17;
+                if (clickedItem == "kl-mk-btn") temp_coord = {lat: 22.319300, lng: 114.169454};
+                if (clickedItem == "kl-pw-btn") temp_coord = {lat:22.324342, lng: 114.168280};
+                if (clickedItem == "kl-tst-btn") temp_coord = {lat: 22.299375, lng: 114.175134};
+                if (clickedItem == "hk-wc-btn") {temp_coord = {lat: 22.277516, lng: 114.173174};temp_zoom=18;};
+                if (clickedItem == "hk-cwb-btn") temp_coord = {lat: 22.278375, lng: 114.182079};
+                if (clickedItem == "nt-tw-btn") temp_coord = {lat: 22.371299, lng: 114.115029};
+                map.panTo(temp_coord);
+                map.setZoom(temp_zoom);
             }
             event.stopPropagation();
         }, false);
@@ -293,10 +330,26 @@
         initMap()
       }
 
+
+
+      function copyToClipboard(str) {
+        console.log(str);
+        const el = document.createElement('textarea');
+        el.value = str;
+        el.setAttribute('readonly', '');
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
+        el.select();
+        copyText.select();
+        document.execCommand("copy");
+        alert("你已複製: " + el.value);
+        document.body.removeChild(el);
+    }
+
     </script>
+    <script src="src/markerclusterer.js"></script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY8m0DgOQR3CsKGxULgswQMNSN9RRyKpo&callback=detectBrowser&region=HK&libraries=places"></script>
-    <script type="text/javascript">if(typeof wabtn4fg==="undefined"){wabtn4fg=1;h=document.head||document.getElementsByTagName("head")[0],s=document.createElement("script");s.type="text/javascript";s.src="dist/whatsapp-button.js";h.appendChild(s);}</script>
-
   </body>
 </html>
