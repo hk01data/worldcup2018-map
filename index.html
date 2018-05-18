@@ -3,20 +3,27 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta charset="utf-8">
+
+     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        height: 100%;
+        position: relative;
       }
+
       /* Optional: Makes the sample page fill the window. */
-      html, body {
+      html, body, #map {
         height: 100%;
         margin: 0;
         padding: 0;
+
       }
 
-      #description {
+/*      #description {
         font-family: Roboto;
         font-size: 15px;
         font-weight: 300;
@@ -66,10 +73,9 @@
         font-family: Roboto;
         font-size: 15px;
         font-weight: 300;
-        margin-left: 12px;
         padding: 0 11px 0 13px;
         text-overflow: ellipsis;
-        width: 400px;
+        width: 100%;
       }
 
       #pac-input:focus {
@@ -86,21 +92,25 @@
       #target {
         width: 345px;
       }
+*/
 
-
-
+        .angular-google-map-container {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
     </style>
   </head>
   <body>
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <input id="pac-input" class="form-control" type="text" placeholder="搜尋餐廳">
     <div id="screen-selector" data-role="navbar">
-      <button id="mk-btn">旺角</button>
-      <button id="tst-btn">尖沙咀</button>
-      <button id="cwb-btn">銅鑼灣</button>
+      <button type="button" class="btn btn-outline-secondary btn-sm" id="mk-btn">旺角</button>
+      <button type="button" class="btn btn-outline-secondary btn-sm" id="tst-btn">尖沙咀</button>
+      <button type="button" class="btn btn-outline-secondary btn-sm" id="cwb-btn">銅鑼灣</button>
     </div>
-
+<a href="whatsapp://send" data-text="Take a look at this awesome website:" data-href="" class="wa_btn wa_btn_s" >Share</a>
     <div id="map"></div>
-
     <script>
       
       function initMap() {
@@ -125,11 +135,32 @@
 
         var infowindow = new google.maps.InfoWindow();
         map.data.addListener('click', function(event) {
-        var myHTML = event.feature.getProperty("address");
-          infowindow.setContent("<div style='width:150px; text-align: center;'>"+myHTML+"</div>");
-          infowindow.setPosition(event.feature.getGeometry().get());
-          infowindow.setOptions({pixelOffset: new google.maps.Size(0,-30)});
-          infowindow.open(map);
+          var info_name = event.feature.getProperty("name");
+          var info_address = event.feature.getProperty("address");
+          var info_phone = event.feature.getProperty("phone");
+          var info_opening_hour = event.feature.getProperty("opening_hour");
+          var info_play_schedule = event.feature.getProperty("play_schedule");
+          var info_reservation = event.feature.getProperty("reservation");
+          var info_min_charge = event.feature.getProperty("min_charge");
+          var info_special_event = event.feature.getProperty("special_event");
+              infowindow.setContent("<div style='width:150px;'>"+
+                "<h6>"+info_name+"</h6>"+
+                "<div class='info-content'>"+
+                info_address+"<br />"+
+                info_phone+"<br />"+
+                info_opening_hour+"<br />"+
+                info_play_schedule+"<br />"+
+                info_reservation+"<br />"+
+                info_min_charge+"<br />"+
+                info_special_event+"<br />"+
+                "</div>"+
+                "<a href='whatsapp://send' data-text='"+
+                info_address+
+                "' data-href='' class='wa_btn wa_btn_s' style='display:none'>Share</a>"+
+                "</div>");
+            infowindow.setPosition(event.feature.getGeometry().get());
+            infowindow.setOptions({pixelOffset: new google.maps.Size(0,-30)});
+            infowindow.open(map);
           });
       // This example adds a search box to a map, using the Google Place Autocomplete
       // feature. People can enter geographical searches. The search box will return a
@@ -142,7 +173,6 @@
         // Create the search box and link it to the UI element.
         var input = document.getElementById('pac-input');
         var searchBox = new google.maps.places.SearchBox(input);
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
         // Bias the SearchBox results towards current map's viewport.
         map.addListener('bounds_changed', function() {
@@ -252,7 +282,7 @@
 
         if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
           mapdiv.style.width = '100%';
-          //mapdiv.style.height = '100%';
+          mapdiv.style.height = '100%';
         } 
 
         initMap()
@@ -261,5 +291,7 @@
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY8m0DgOQR3CsKGxULgswQMNSN9RRyKpo&callback=detectBrowser&region=HK&libraries=places"></script>
+    <script type="text/javascript">if(typeof wabtn4fg==="undefined"){wabtn4fg=1;h=document.head||document.getElementsByTagName("head")[0],s=document.createElement("script");s.type="text/javascript";s.src="dist/whatsapp-button.js";h.appendChild(s);}</script>
+
   </body>
 </html>
