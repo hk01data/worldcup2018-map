@@ -18,21 +18,60 @@
       }
 
       /* Optional: Makes the sample page fill the window. */
-      html, body, #map {
+      html, body {
         height: 100%;
         margin: 0;
         padding: 0;
 
       }
-      #iw-container h6 {
-        margin: 5px 0;
+
+      #map {
+        flex: 1;
       }
 
+      #bigcontainer {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+      }
+
+      #header .form-group {
+        margin: 0;
+      }
+
+      .gm-style-iw {
+        max-width: 200px;
+      }
+
+      .gm-style-iw div {
+        overflow-x: hidden;
+      }
+
+      #iw-container h6 {
+        margin: 8px 0;
+      }
+
+      #iw-container .container {
+        padding: 0;
+      }
+
+      #iw-container dt {
+        padding-right: 0;
+      }
+
+      #iw-container .row {
+        margin-bottom: 6px;
+        border-bottom: 1px solid rgba(0,0,0,.1);  
+      }
+      
       .pac-item {
         padding: 2px 0;
       }
 
       #share-button {
+        margin-top: 5px;
         width: 100%;
         text-align: center;
       }
@@ -72,284 +111,333 @@
       .facebook {
         background: #3b5998;
       }
-      
+
+      .twitter {
+        background: #55acee;
+      }
+
       .telegram {
         background: #0088cc;
+      }
+      .copy {
+        background: #666666;
       }
 
     </style>
   </head>
   <body>
-    <input id="pac-input" class="form-control" type="text" placeholder="搜尋餐廳">
-    <div class="form-group row">
-      <label for="staticEmail" class="col-sm-1 col-form-label-sm">熱門地區</label>
-      <div class="col-sm-11" id="screen-selector">
-        <button type="button" class="btn btn-outline-secondary btn-sm" id="kl-mk-btn">旺角</button>
-        <button type="button" class="btn btn-outline-secondary btn-sm" id="kl-pw-btn">太子</button>
-        <button type="button" class="btn btn-outline-secondary btn-sm" id="kl-tst-btn">尖沙咀</button>
-        <button type="button" class="btn btn-outline-secondary btn-sm" id="hk-wc-btn">灣仔</button>
-        <button type="button" class="btn btn-outline-secondary btn-sm" id="hk-cwb-btn">銅鑼灣</button>
-        <button type="button" class="btn btn-outline-secondary btn-sm" id="nt-tw-btn">荃灣</button>
+    <!-- Facebook Share -->
+<!--     <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.0&appId=1651866545051541&autoLogAppEvents=1';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script> -->
+    <div id="bigcontainer">
+      <div id="header">
+        <input id="pac-input" class="form-control" type="text" placeholder="搜尋餐廳">
+        <div class="form-group row">
+          <div class="col" id="screen-selector">
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="kl-mk-btn">旺角</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="kl-pw-btn">太子</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="kl-tst-btn">尖沙咀</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="hk-wc-btn">灣仔</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="hk-cwb-btn">銅鑼灣</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="nt-tw-btn">荃灣</button>
+          </div>
+        </div>
       </div>
-    </div>
-    <div id="map"></div>
-    <script>
+      <div id="map"></div>
+      <script>
+        var screen_width;
+        function initMap() {
+          var hk = {lat: 22.3750568, lng: 114.1050191}; //{lat: 22.3750568, lng: 114.1050191}; 
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 12, 
+            // minZoom: 11.5,
+            center: hk,
+            mapTypeControl: false,
+            streetViewControl: false,
+            gestureHandling: "greedy"
+          });
+
+
+          // Load GeoJSON.
+          map.data.loadGeoJson('restaurant.json', null, function(features) {
       
-      function initMap() {
-        var hk = {lat: 22.3750568, lng: 114.1050191}; //{lat: 22.3750568, lng: 114.1050191}; 
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 12, 
-          // minZoom: 11.5,
-          center: hk,
-          mapTypeControl: false,
-          streetViewControl: false,
-          gestureHandling: "greedy"
-        });
+              // group items / cluster
+              var infoWin = new google.maps.InfoWindow();
+              var markers = features.map(function(feature) {
+                  var g = feature.getGeometry();
 
+                  var marker = new google.maps.Marker({
+                      'position': g.get(0),
+                      'data' : feature,
+                      'icon' : 'markerclusterer/m1.png'
+                  });
+                google.maps.event.addListener(marker, 'click', function(evt) {
+                  var info_name = marker.data.f.name;
+                  var info_address = marker.data.f.address;
+                  var info_phone = marker.data.f.phone;
+                  var info_opening_hour = marker.data.f.opening_hour;
+                  var info_play_schedule = marker.data.f.play_schedule;
+                  var info_reservation = marker.data.f.reservation;
+                  var info_min_charge = marker.data.f.min_charge;
+                  var info_special_event = marker.data.f.special_event;
 
-        // Load GeoJSON.
-        map.data.loadGeoJson('restaurant.json', null, function(features) {
-    
-            // group items / cluster
-            var infoWin = new google.maps.InfoWindow();
-            var markers = features.map(function(feature) {
-                var g = feature.getGeometry();
+                  var share_info = info_name + ' | ' + info_address
+                  console.log(share_info)
+                  var content = "<div id='iw-container'>"+
+                  "<h6>"+info_name+"</h6>"+
+                    "<div class='info-content'>"+
+                      "<dl class='row'>"+
+                        "<dt class='col-1'><i class='fas fa-map-marker-alt'></i></dt><dd class='col-11'>"+info_address+"</dd>"+
+                        "<dt class='col-1'><i class='fas fa-phone'></i></dt><dd class='col-11'>"+info_phone+"</dd>"+
+                        "<dt class='col-1'><i class='far fa-clock'></i></dt><dd class='col-11'>"
+                  if (info_opening_hour) content += info_opening_hour;
+                  else content += "未有提供營業時間";
+                     content += "</dd>"+
+                        "<dt class='col-1'><i class='fas fa-calendar-alt'></i></dt><dd class='col-11'>播放場次："
+                  if (info_play_schedule) content += info_play_schedule;
+                  else content += "未有提供";
+                     content += "</dd>"+
+                        "<dt class='col-1'><i class='fas fa-phone-volume'></i></dt><dd class='col-11'>訂位："
+                  if (info_reservation) content += info_reservation;
+                  else content += "不用";
+                     content += "</dd>"+
+                        "<dt class='col-1'><i class='fas fa-dollar-sign'></i></dt><dd class='col-11'>最低消費："
+                  if (info_min_charge) content += info_min_charge;
+                  else content += "沒有";
+                    content += "</dd></dl>"
+                  if (info_special_event) content += info_special_event;
+                    content +=
+                    "</div><div id='share-button'>"+
+                      "<a class='whatsapp' href='whatsapp://send?text="+share_info+"' target='_blank'>"+"<i class='fab fa-whatsapp'></i></a>"+
+                      // "<a class='facebook fb-xfbml-parse-ignore' href='https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fbit.ly%2Fhk01wc18map&amp;src=sdkpreparse' target='_blank'>"+"<i class='fab fa-facebook'></i></a>"+
+                      "<a class='twitter'  href='https://twitter.com/intent/tweet/?text="+share_info+"' target='_blank'>"+"<i class='fab fa-twitter'></i></a>"+
+                      "<a class='telegram'  href='https://telegram.me/share/url?url=https://bit.ly/hk01wc18map&text="+share_info+"' target='_blank'>"+"<i class='fab fa-telegram'></i></a>"+
+                      "<a class='copy' id='copyToClipboard' name = '"+ share_info +"' href='#' onclick=copyToClipboard()><i class='far fa-copy'></i></a>"+
+                    "</div>"+
+                  "</div>"
+                  infoWin.setContent(content);
+                  infoWin.open(map, marker);
+                })
+                  return marker;
+              });
 
-                var marker = new google.maps.Marker({
-                    'position': g.get(0),
-                    'data' : feature
-                });
-              google.maps.event.addListener(marker, 'click', function(evt) {
-                var info_name = marker.data.f.name;
-                var info_address = marker.data.f.address;
-                var info_phone = marker.data.f.phone;
-                var info_opening_hour = marker.data.f.opening_hour;
-                var info_play_schedule = marker.data.f.play_schedule;
-                var info_reservation = marker.data.f.reservation;
-                var info_min_charge = marker.data.f.min_charge;
-                var info_special_event = marker.data.f.special_event;
-                infoWin.setContent("<div id='iw-container'>"+
-                "<h6>"+info_name+"</h6>"+
-                  "<div class='info-content'>"+
-                  "<dl class='row'>"+
-                    "<dt class='col-sm-1'><i class='fas fa-map-marker-alt'></i></dt><dd class='col-sm-11'>"+info_address+"</dd>"+
-                    "<dt class='col-sm-1'><i class='fas fa-phone'></i></dt><dd class='col-sm-11'>"+info_phone+"</dd>"+
-                    "<dt class='col-sm-1'><i class='far fa-clock'></i></dt><dd class='col-sm-11'>"+info_opening_hour+"</dd>"+
-                  "</dl>"+
-                    info_play_schedule+"; "+
-                    info_reservation+"; "+
-                    info_min_charge+"; "+
-                    info_special_event+
-                  "</div>"+
-                  "<div id='share-button'>"+
-                    "<a class='whatsapp'  href='whatsapp://send?text="+info_address+"'>"+"<i class='fab fa-whatsapp'></i></a>"+
-                    "<a class='facebook' href='fb-messenger://share?text="+info_address+"'>"+"<i class='fab fa-facebook'></i></a>"+
-                    "<a class='telegram'  href='https://telegram.me/share/url?url=hk01data.github.io/worldcup2018-map&text="+info_address+"'>"+"<i class='fab fa-telegram'></i></a>"+
-                    "<a class='copy'  href='' onclick='copyToClipboard()'><i class='far fa-copy'></i></a>"+
-                  "</div>"+
-                "</div>");
-                infoWin.open(map, marker);
-              })
-                return marker;
-            });
+              // create a new marker cluster
+              var markerCluster = new MarkerClusterer(map, markers, {
+                  imagePath: 'markerclusterer/m',
+                  gridSize: 50,
+                  maxZoom: 16, 
+                  zoomOnClick: true
+              });
 
-            // create a new marker cluster
-            var markerCluster = new MarkerClusterer(map, markers, {
-                imagePath: 'markerclusterer/m',
-                gridSize: 50,
-                maxZoom: 16, 
-                zoomOnClick: true,
-            });
+              // add event listener to the cluster
+              google.maps.event.addListener(markerCluster, 'clusterclick', function (cluster) {
+               // handle clickevent
+              });
 
-            // add event listener to the cluster
-            google.maps.event.addListener(markerCluster, 'clusterclick', function (cluster) {
-             // handle clickevent
-            });
-
-        });
-
-            map.data.setStyle(function (feature) {
-            return { icon: feature.getProperty('icon'), visible: false };
-        });
-              
-        // map.data.setStyle({
-        //   icon: 'icon/soccer-ball.png'
-        // });
-          // bounds of the desired area
-          var bounds = new google.maps.LatLngBounds(
-            new google.maps.LatLng(22.152842, 113.831202),
-            new google.maps.LatLng(22.554093, 114.445288)
-            );
-
-          var lastValidCenter = map.getCenter();
-
-          map.addListener('center_changed', function() {
-            console.log("moved")
-              // if (bounds.contains(map.getCenter())) {
-              //     // still within valid bounds, so save the last valid position
-              //     lastValidCenter = map.getCenter();
-              //     return; 
-              // }
-              // not valid anymore => return to last valid position
-              map.panToBounds(bounds);
           });
-        // Set mouseover event for each feature.
 
-      // This example adds a search box to a map, using the Google Place Autocomplete
-      // feature. People can enter geographical searches. The search box will return a
-      // pick list containing a mix of places and predicted search terms.
-
-      // This example requires the Places library. Include the libraries=places
-      // parameter when you first load the API. For example:
-      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
-        // Create the search box and link it to the UI element.
-        var input = document.getElementById('pac-input');
-        var searchBox = new google.maps.places.SearchBox(input);
-
-        // Bias the SearchBox results towards current map's viewport.
-        // map.addListener('bounds_changed', function() {
-        //   searchBox.setBounds(map.getBounds());
-        // });
-
-        searchBox.setBounds(bounds);
-
-        var markers = [];
-        // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
-        searchBox.addListener('places_changed', function() {
-          var places = searchBox.getPlaces();
-
-          if (places.length == 0) {
-            return;
-          }
-
-          // Clear out the old markers.
-          markers.forEach(function(marker) {
-            marker.setMap(null);
+              map.data.setStyle(function (feature) {
+              return { icon: feature.getProperty('icon'), visible: false };
           });
-          markers = [];
+                
+          // map.data.setStyle({
+          //   icon: 'icon/soccer-ball.png'
+          // });
+            // bounds of the desired area
+            var bounds = new google.maps.LatLngBounds(
+              new google.maps.LatLng(22.152842, 113.831202),
+              new google.maps.LatLng(22.644851, 114.455809)
+              );
 
+            var lastValidCenter = map.getCenter();
 
-          // For each place, get the icon, name and location.
-          places.forEach(function(place) {
-            if (!place.geometry) {
-              console.log("Returned place contains no geometry");
+            map.addListener('center_changed', function() {
+              console.log("moved")
+                // if (bounds.contains(map.getCenter())) {
+                //     // still within valid bounds, so save the last valid position
+                //     lastValidCenter = map.getCenter();
+                //     return; 
+                // }
+                // not valid anymore => return to last valid position
+                map.panToBounds(bounds);
+            });
+          // Set mouseover event for each feature.
+
+        // This example adds a search box to a map, using the Google Place Autocomplete
+        // feature. People can enter geographical searches. The search box will return a
+        // pick list containing a mix of places and predicted search terms.
+
+        // This example requires the Places library. Include the libraries=places
+        // parameter when you first load the API. For example:
+        // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+          // Create the search box and link it to the UI element.
+          var input = document.getElementById('pac-input');
+          var searchBox = new google.maps.places.SearchBox(input);
+
+          // Bias the SearchBox results towards current map's viewport.
+          // map.addListener('bounds_changed', function() {
+          //   searchBox.setBounds(map.getBounds());
+          // });
+
+          searchBox.setBounds(bounds);
+
+          var markers = [];
+          // Listen for the event fired when the user selects a prediction and retrieve
+          // more details for that place.
+          searchBox.addListener('places_changed', function() {
+            var places = searchBox.getPlaces();
+            if (places.length == 0) {
               return;
             }
-            var icon = {
-              url: place.icon,
-              size: new google.maps.Size(71, 71),
-              origin: new google.maps.Point(0, 0),
-              anchor: new google.maps.Point(17, 34),
-              scaledSize: new google.maps.Size(25, 25)
-            };
 
-            // Create a marker for each place.
-            markers.push(new google.maps.Marker({
-              map: map,
-              icon: icon,
-              title: place.name,
-              position: place.geometry.location
-            }));
+            // Clear out the old markers.
+            markers.forEach(function(marker) {
+              marker.setMap(null);
+              console.log("Clear out the old markers");
+            });
+            markers = [];
 
-            if (place.geometry.viewport) {
-              // Only geocodes have viewport.
-              bounds.union(place.geometry.viewport);
-            } else {
-              bounds.extend(place.geometry.location);
-            }
+            var bounds = new google.maps.LatLngBounds();
+            // For each place, get the icon, name and location.
+            places.forEach(function(place) {
+              if (!place.geometry) {
+                console.log("Returned place contains no geometry");
+                return;
+              }
+              var icon = {
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(25, 25)
+              };
+
+              // Create a marker for each place.
+              markers.push(new google.maps.Marker({
+                map: map,
+                icon: icon,
+                title: place.name,
+                position: place.geometry.location
+              }));
+
+              if (place.geometry.viewport) {
+                // Only geocodes have viewport.
+                bounds.union(place.geometry.viewport);
+              } else {
+                bounds.extend(place.geometry.location);
+              }
+            });
+            map.fitBounds(bounds);
+            //map.setZoom(15);
+
           });
-          map.fitBounds(bounds);
-        });
 
 
-        // Try HTML5 geolocation.
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
+          // Try HTML5 geolocation.
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+              var pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+              };
 
-            //infowindow.setPosition(pos);
-            //infowindow.setContent('Location found.');
-            //infowindow.open(map);
-            map.setCenter(pos);
-          }, function() {
-            handleLocationError(true, infowindow, map.getCenter());
-          });
-        } else {
-          // Browser doesn't support Geolocation
-          handleLocationError(false, infowindow, map.getCenter());
+              //infowindow.setPosition(pos);
+              //infowindow.setContent('Location found.');
+              //infowindow.open(map);
+              map.setCenter(pos);
+            }, function() {
+              handleLocationError(true, infowindow, map.getCenter());
+            });
+          } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infowindow, map.getCenter());
+          }
+
+
+          // Create the search box and link it to the UI element.
+          //var mk = document.getElementsByClassName('poi');
+          var poi_choice = document.getElementById('screen-selector');
+
+          //poi_choice.addEventListener('click', function() {
+
+          poi_choice.addEventListener("click", function (event) {
+              if (event.target !== event.currentTarget) {
+                  var clickedItem = event.target.id;
+                  console.log("Hello " + clickedItem);
+                  var temp_coord;
+                  var temp_zoom = 17;
+                  if (screen_width > 576) {
+                    if (clickedItem == "kl-mk-btn") temp_coord = {lat: 22.319300, lng: 114.169454};
+                    if (clickedItem == "kl-pw-btn") temp_coord = {lat: 22.324342, lng: 114.168280};
+                    if (clickedItem == "kl-tst-btn") temp_coord = {lat: 22.299375, lng: 114.175134};
+                    if (clickedItem == "hk-wc-btn") {temp_coord = {lat: 22.277516, lng: 114.173174};temp_zoom=18;};
+                    if (clickedItem == "hk-cwb-btn") temp_coord = {lat: 22.278375, lng: 114.182079};
+                    if (clickedItem == "nt-tw-btn") temp_coord = {lat: 22.371299, lng: 114.115029};  
+                  } else {  // mobile screen
+                    if (clickedItem == "kl-mk-btn") {temp_coord = {lat: 22.319260, lng: 114.169320};temp_zoom=16;};
+                    if (clickedItem == "kl-pw-btn") {temp_coord = {lat: 22.325195, lng: 114.168205};temp_zoom=16;
+                      };
+                    if (clickedItem == "kl-tst-btn") temp_coord = {lat: 22.299375, lng: 114.175134};
+                    if (clickedItem == "hk-wc-btn") {temp_coord = {lat: 22.277721, lng: 114.172406};temp_zoom=17;};
+                    if (clickedItem == "hk-cwb-btn") temp_coord = {lat: 22.278375, lng: 114.182079};
+                    if (clickedItem == "nt-tw-btn") {temp_coord = {lat: 22.371299, lng: 114.115029};temp_zoom=17;};                   
+                  }
+
+                  map.panTo(temp_coord);
+                  map.setZoom(temp_zoom);
+              }
+              event.stopPropagation();
+          }, false);
+        }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+          infoWindow.setPosition(pos);
+          infoWindow.setContent(browserHasGeolocation ?
+                                'Error: The Geolocation service failed.' :
+                                'Error: Your browser doesn\'t support geolocation.');
+          infoWindow.open(map);
+        }
+
+        function detectBrowser() {
+          var useragent = navigator.userAgent;
+          var mapdiv = document.getElementById("map");
+          console.log(screen.width);
+          screen_width = screen.width;
+
+          if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
+            mapdiv.style.width = '100%';
+            mapdiv.style.height = '100%';
+          } 
+
+          initMap()
         }
 
 
-        // Create the search box and link it to the UI element.
-        //var mk = document.getElementsByClassName('poi');
-        var poi_choice = document.getElementById('screen-selector');
 
-        //poi_choice.addEventListener('click', function() {
-
-        poi_choice.addEventListener("click", function (event) {
-            if (event.target !== event.currentTarget) {
-                var clickedItem = event.target.id;
-                console.log("Hello " + clickedItem);
-                var temp_coord;
-                var temp_zoom = 17;
-                if (clickedItem == "kl-mk-btn") temp_coord = {lat: 22.319300, lng: 114.169454};
-                if (clickedItem == "kl-pw-btn") temp_coord = {lat:22.324342, lng: 114.168280};
-                if (clickedItem == "kl-tst-btn") temp_coord = {lat: 22.299375, lng: 114.175134};
-                if (clickedItem == "hk-wc-btn") {temp_coord = {lat: 22.277516, lng: 114.173174};temp_zoom=18;};
-                if (clickedItem == "hk-cwb-btn") temp_coord = {lat: 22.278375, lng: 114.182079};
-                if (clickedItem == "nt-tw-btn") temp_coord = {lat: 22.371299, lng: 114.115029};
-                map.panTo(temp_coord);
-                map.setZoom(temp_zoom);
-            }
-            event.stopPropagation();
-        }, false);
+        function copyToClipboard() {
+          const el = document.createElement('textarea');
+          el.value = document.getElementById("copyToClipboard").getAttribute("name");
+          el.setAttribute('readonly', '');
+          el.style.position = 'absolute';
+          el.style.left = '-9999px';
+          document.body.appendChild(el);
+          el.select();
+          document.execCommand("copy");
+          alert("你已複製: " + el.value);
+          document.body.removeChild(el);
       }
 
-      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.' :
-                              'Error: Your browser doesn\'t support geolocation.');
-        infoWindow.open(map);
-      }
-
-      function detectBrowser() {
-        var useragent = navigator.userAgent;
-        var mapdiv = document.getElementById("map");
-
-        if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
-          mapdiv.style.width = '100%';
-          mapdiv.style.height = '100%';
-        } 
-
-        initMap()
-      }
-
-
-
-      function copyToClipboard(str) {
-        console.log(str);
-        const el = document.createElement('textarea');
-        el.value = str;
-        el.setAttribute('readonly', '');
-        el.style.position = 'absolute';
-        el.style.left = '-9999px';
-        document.body.appendChild(el);
-        el.select();
-        copyText.select();
-        document.execCommand("copy");
-        alert("你已複製: " + el.value);
-        document.body.removeChild(el);
-    }
-
-    </script>
-    <script src="src/markerclusterer.js"></script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY8m0DgOQR3CsKGxULgswQMNSN9RRyKpo&callback=detectBrowser&region=HK&libraries=places"></script>
+      </script>
+      <script src="src/markerclusterer.js"></script>
+      <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY8m0DgOQR3CsKGxULgswQMNSN9RRyKpo&callback=detectBrowser&region=HK&libraries=places"></script>
+    </div>
   </body>
 </html>
