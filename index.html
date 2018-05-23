@@ -2,6 +2,16 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-70981149-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-70981149-1');
+    </script>
+
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta charset="utf-8">
 
@@ -65,7 +75,54 @@
         margin-bottom: 6px;
         border-bottom: 1px solid rgba(0,0,0,.1);  
       }
+
+      .scrollmenu {
+          background-color: #0f4583;
+          border-bottom: 5px solid #a21b1f;  
+          overflow-x: auto;
+          white-space: nowrap;
+          margin: 0;
+          padding: 0 5px;
+      }
+
+      .scrollmenu li {
+          display: inline-block;
+          padding: 5px 8px;
+      }
+
+      .scrollmenu li a {
+          color: white;
+          text-decoration: none;
+      }
+
+      .scrollmenu li:hover {
+          background-color: #fff;
+      }      
+
+      .scrollmenu li:hover a{
+          color: #000;
+      }   
       
+      /* width */
+      ::-webkit-scrollbar {
+          width: 5px;
+      }
+
+      /* Track */
+      ::-webkit-scrollbar-track {
+          background: #f1f1f1; 
+      }
+       
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+          background: #888; 
+      }
+
+      /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+          background: #555; 
+      }
+
       .pac-item {
         padding: 2px 0;
       }
@@ -138,16 +195,17 @@
     <div id="bigcontainer">
       <div id="header">
         <input id="pac-input" class="form-control" type="text" placeholder="搜尋餐廳">
-        <div class="form-group row">
-          <div class="col" id="screen-selector">
-            <button type="button" class="btn btn-outline-secondary btn-sm" id="kl-mk-btn">旺角</button>
-            <button type="button" class="btn btn-outline-secondary btn-sm" id="kl-pw-btn">太子</button>
-            <button type="button" class="btn btn-outline-secondary btn-sm" id="kl-tst-btn">尖沙咀</button>
-            <button type="button" class="btn btn-outline-secondary btn-sm" id="hk-wc-btn">灣仔</button>
-            <button type="button" class="btn btn-outline-secondary btn-sm" id="hk-cwb-btn">銅鑼灣</button>
-            <button type="button" class="btn btn-outline-secondary btn-sm" id="nt-tw-btn">荃灣</button>
-          </div>
-        </div>
+        <ul class="scrollmenu" id="screen-selector">
+          <li><a href="#" id="kl-mk-btn">旺角</a></li>
+          <li><a href="#" id="kl-pw-btn">太子</a></li>
+          <li><a href="#" id="kl-tst-btn">尖沙咀</a></li>
+          <li><a href="#" id="hk-wc-btn">灣仔</a></li>
+          <li><a href="#" id="hk-cwb-btn">銅鑼灣</a></li>
+          <li><a href="#" id="hk-ct-btn">中環</a></li>
+          <li><a href="#" id="hk-sw-btn">上環</a></li>
+          <li><a href="#" id="kl-kt-btn">觀塘</a></li>
+          <li><a href="#" id="nt-tw-btn">荃灣</a></li>
+        </ul>
       </div>
       <div id="map"></div>
       <script>
@@ -379,6 +437,9 @@
                     if (clickedItem == "kl-tst-btn") temp_coord = {lat: 22.299375, lng: 114.175134};
                     if (clickedItem == "hk-wc-btn") {temp_coord = {lat: 22.277516, lng: 114.173174};temp_zoom=18;};
                     if (clickedItem == "hk-cwb-btn") temp_coord = {lat: 22.278375, lng: 114.182079};
+                    if (clickedItem == "hk-ct-btn") temp_coord = {lat: 22.282615, lng: 114.153344};
+                    if (clickedItem == "hk-sw-btn") temp_coord = {lat: 22.285057, lng: 114.147261};
+                    if (clickedItem == "kl-kt-btn") temp_coord = {lat: 22.313683, lng: 114.221671};
                     if (clickedItem == "nt-tw-btn") temp_coord = {lat: 22.371299, lng: 114.115029};  
                   } else {  // mobile screen
                     if (clickedItem == "kl-mk-btn") {temp_coord = {lat: 22.319260, lng: 114.169320};temp_zoom=16;};
@@ -387,6 +448,9 @@
                     if (clickedItem == "kl-tst-btn") temp_coord = {lat: 22.299375, lng: 114.175134};
                     if (clickedItem == "hk-wc-btn") {temp_coord = {lat: 22.277721, lng: 114.172406};temp_zoom=17;};
                     if (clickedItem == "hk-cwb-btn") temp_coord = {lat: 22.278375, lng: 114.182079};
+                    if (clickedItem == "hk-ct-btn") temp_coord = {lat: 22.282615, lng: 114.153344};
+                    if (clickedItem == "hk-sw-btn") temp_coord = {lat: 22.285057, lng: 114.147261};
+                    if (clickedItem == "kl-kt-btn") temp_coord = {lat: 22.313683, lng: 114.221671};
                     if (clickedItem == "nt-tw-btn") {temp_coord = {lat: 22.371299, lng: 114.115029};temp_zoom=17;};                   
                   }
 
@@ -437,7 +501,7 @@
       </script>
       <script src="src/markerclusterer.js"></script>
       <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY8m0DgOQR3CsKGxULgswQMNSN9RRyKpo&callback=detectBrowser&region=HK&libraries=places"></script>
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY8m0DgOQR3CsKGxULgswQMNSN9RRyKpo&callback=detectBrowser&region=zh-TW&libraries=places"></script>
     </div>
   </body>
 </html>
