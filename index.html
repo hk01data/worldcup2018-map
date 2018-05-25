@@ -24,7 +24,7 @@
       </div>
       <div id="map"></div>
       <script>
-        var current_district = "all";
+        var current_district;
         var temp_zoom;
         var temp_coord;
 
@@ -32,7 +32,7 @@
           detectBrowser();
           current_district = detect_district();
           console.log("Current district: " + current_district);
-          setScope("anchor", current_district);
+          (current != "all") ? setScope("anchor", current_district);
           populateHeader(district_data)
           initMap();
         }
