@@ -32,7 +32,7 @@
           detectBrowser();
           current_district = detect_district();
           console.log("Current district: " + current_district);
-          if (current != "all") setScope("anchor", current_district);
+          (current_district != "all") ? setScope("anchor", current_district);
           populateHeader(district_data);
           initMap();
         }
