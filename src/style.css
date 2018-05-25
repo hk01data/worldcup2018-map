@@ -1,0 +1,158 @@
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        position: relative;
+      }
+
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+
+      }
+
+      #map {
+        flex: 1;
+      }
+
+      #bigcontainer {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+      }
+
+      #header .form-group {
+        margin: 0;
+      }
+
+      .gm-style-iw {
+        max-width: 250px;
+      }
+
+      .gm-style-iw div {
+        overflow-x: hidden;
+      }
+
+      #iw-container h6 {
+        margin: px 0;
+      }
+
+      #iw-container .container {
+        padding: 0;
+      }
+
+      #iw-container dt {
+        padding-right: 0;
+      }
+
+      #iw-container .row {
+        margin-bottom: 6px;
+        /*border-bottom: 1px solid rgba(0,0,0,.1); */ 
+        border-bottom: 1px solid #a21b1f; 
+      }
+
+      .scrollmenu {
+          background-color: #0f4583;
+          border-bottom: 5px solid #a21b1f;  
+          overflow-x: auto;
+          white-space: nowrap;
+          margin: 0;
+          padding: 0 5px;
+      }
+
+      .scrollmenu li {
+          display: inline-block;
+          padding: 5px 8px;
+      }
+
+      .scrollmenu li a {
+          color: white;
+          text-decoration: none;
+      }
+
+      .scrollmenu li:hover {
+          background-color: #fff;
+      }      
+
+      .scrollmenu li:hover a{
+          color: #000;
+      }   
+
+      /* width */
+      ::-webkit-scrollbar {
+          height: 3px;
+      }
+
+      /* Track */
+      ::-webkit-scrollbar-track {
+          background: #888; 
+      }
+       
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+          background: #f1f1f1; 
+      }
+
+      /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+          background: #555; 
+      }
+
+      .pac-item {
+        padding: 2px 0;
+      }
+
+      #share-button {
+        margin-top: 5px;
+        width: 100%;
+        text-align: center;
+      }
+
+      #share-button a {
+        width: 30px;
+          height: 30px;
+          display: inline-block;
+          margin: 0 4px;
+/*          border-radius: 50%;*/
+          font-size: 20px;
+          color: #fff;
+/*        opacity: 0.75;*/
+        transition: opacity 0.15s linear;
+      }
+
+
+      #share-button a:hover {
+        opacity: 0.5;
+      }
+
+      /* icons */
+
+      #share-button i {
+          position: relative;
+          top: 47%;
+          transform: translateY(-50%);
+      }
+
+      /* colors */
+
+      .whatsapp {
+        background: #00e676;
+      }
+
+      .facebook {
+        background: #3b5998;
+      }
+
+      .twitter {
+        background: #55acee;
+      }
+
+      .telegram {
+        background: #0088cc;
+      }
+      .copy {
+        background: #666666;
+      }

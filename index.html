@@ -2,16 +2,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-70981149-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-70981149-1');
-    </script>
-
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta charset="utf-8">
 
@@ -20,195 +10,66 @@
 
      <!-- Font Awesome Free -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        position: relative;
-      }
-
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-
-      }
-
-      #map {
-        flex: 1;
-      }
-
-      #bigcontainer {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-      }
-
-      #header .form-group {
-        margin: 0;
-      }
-
-      .gm-style-iw {
-        max-width: 200px;
-      }
-
-      .gm-style-iw div {
-        overflow-x: hidden;
-      }
-
-      #iw-container h6 {
-        margin: 8px 0;
-      }
-
-      #iw-container .container {
-        padding: 0;
-      }
-
-      #iw-container dt {
-        padding-right: 0;
-      }
-
-      #iw-container .row {
-        margin-bottom: 6px;
-        border-bottom: 1px solid rgba(0,0,0,.1);  
-      }
-
-      .scrollmenu {
-          background-color: #0f4583;
-          border-bottom: 5px solid #a21b1f;  
-          overflow-x: auto;
-          white-space: nowrap;
-          margin: 0;
-          padding: 0 5px;
-      }
-
-      .scrollmenu li {
-          display: inline-block;
-          padding: 5px 8px;
-      }
-
-      .scrollmenu li a {
-          color: white;
-          text-decoration: none;
-      }
-
-      .scrollmenu li:hover {
-          background-color: #fff;
-      }      
-
-      .scrollmenu li:hover a{
-          color: #000;
-      }   
-
-      /* width */
-      ::-webkit-scrollbar {
-          height: 3px;
-      }
-
-      /* Track */
-      ::-webkit-scrollbar-track {
-          background: #888; 
-      }
-       
-      /* Handle */
-      ::-webkit-scrollbar-thumb {
-          background: #f1f1f1; 
-      }
-
-      /* Handle on hover */
-      ::-webkit-scrollbar-thumb:hover {
-          background: #555; 
-      }
-
-      .pac-item {
-        padding: 2px 0;
-      }
-
-      #share-button {
-        margin-top: 5px;
-        width: 100%;
-        text-align: center;
-      }
-
-      #share-button a {
-        width: 30px;
-          height: 30px;
-          display: inline-block;
-          margin: 0 4px;
-/*          border-radius: 50%;*/
-          font-size: 20px;
-          color: #fff;
-/*        opacity: 0.75;*/
-        transition: opacity 0.15s linear;
-      }
 
 
-      #share-button a:hover {
-        opacity: 0.5;
-      }
-
-      /* icons */
-
-      #share-button i {
-          position: relative;
-          top: 47%;
-          transform: translateY(-50%);
-      }
-
-      /* colors */
-
-
-      .whatsapp {
-        background: #00e676;
-      }
-
-      .facebook {
-        background: #3b5998;
-      }
-
-      .twitter {
-        background: #55acee;
-      }
-
-      .telegram {
-        background: #0088cc;
-      }
-      .copy {
-        background: #666666;
-      }
-
-    </style>
+    <link rel="stylesheet" href="src/style.css" crossorigin="anonymous">
+ 
+    <script type="text/javascript" src="src/districts.js"></script>
   </head>
   <body>
-    <!-- Facebook Share -->
-<!--     <div id="fb-root"></div>
-    <script>(function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.0&appId=1651866545051541&autoLogAppEvents=1';
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script> -->
     <div id="bigcontainer">
       <div id="header">
         <input id="pac-input" class="form-control" type="text" placeholder="搜尋餐廳">
-        <ul class="scrollmenu" id="screen-selector">
-          <li><a href="#" id="kl-mk-btn">旺角</a></li>
-          <li><a href="#" id="kl-pw-btn">太子</a></li>
-          <li><a href="#" id="kl-tst-btn">尖沙咀</a></li>
-          <li><a href="#" id="hk-wc-btn">灣仔</a></li>
-          <li><a href="#" id="hk-cwb-btn">銅鑼灣</a></li>
-          <li><a href="#" id="hk-ct-btn">中環</a></li>
-          <li><a href="#" id="hk-sw-btn">上環</a></li>
-          <li><a href="#" id="kl-kt-btn">觀塘</a></li>
-          <li><a href="#" id="nt-tw-btn">荃灣</a></li>
-        </ul>
+        <ul class="scrollmenu" id="screen-selector"></ul>
       </div>
       <div id="map"></div>
       <script>
+        var current_district = "all";
+        var temp_zoom;
+        var temp_coord;
+
+        function init(){
+          detectBrowser();
+          current_district = detect_district();
+          console.log("Current district: " + current_district);
+          setScope("anchor", current_district);
+          populateHeader(district_data)
+          initMap();
+        }
+
+
+        function findWithAttr(array, attr, value) {
+              for(var i = 0; i < array.length; i += 1) {
+                  if(array[i][attr] === value) {
+                      return i;
+                  }
+              }
+              return -1;
+          }
+
+        function populateHeader(jsonObj) {
+          navbar = document.querySelector(".scrollmenu");
+          var districts = jsonObj;
+           for (var i = 0; i < districts.length; i++) { 
+              var listItem = document.createElement('li');
+              var ahref = document.createElement("a");
+              ahref.textContent = districts[i].display_name;
+              ahref.setAttribute("href", '#'+districts[i]["anchor"]);
+              ahref.setAttribute("id", districts[i]["btn-id"]);
+              navbar.appendChild(listItem);
+              listItem.appendChild(ahref);
+            }
+        }
+
+        // Detect 
+        function detect_district() {
+          var linkText = window.location.href;
+          var district = 'all';
+          if (linkText.match(/#/)) district = linkText.match(/#(.*)/)[1]
+          return district;
+        }
+      
+
         var screen_width;
         function initMap() {
           var hk = {lat: 22.3750568, lng: 114.1050191}; //{lat: 22.3750568, lng: 114.1050191}; 
@@ -223,7 +84,7 @@
 
 
           // Load GeoJSON.
-          map.data.loadGeoJson('restaurant.json', null, function(features) {
+          map.data.loadGeoJson('src/restaurant.json', null, function(features) {
       
               // group items / cluster
               var infoWin = new google.maps.InfoWindow();
@@ -245,8 +106,8 @@
                   var info_min_charge = marker.data.f.min_charge;
                   var info_special_event = marker.data.f.special_event;
 
-                  var share_info = info_name + ' | ' + info_address
-                  console.log(share_info)
+                  var share_info = info_name + ' | ' + info_address;
+                  console.log(share_info);
                   var content = "<div id='iw-container'>"+
                   "<h6>"+info_name+"</h6>"+
                     "<div class='info-content'>"+
@@ -270,10 +131,10 @@
                   else content += "沒有";
                     content += "</dd></dl>"
                   if (info_special_event) content += info_special_event;
+                    content += "</div><div id='share-button'>";
+                  if (screen_width < 576)  content += "<a class='whatsapp' href='whatsapp://send?text="+share_info+"' target='_blank'>"+"<i class='fab fa-whatsapp'></i></a>";
+
                     content +=
-                    "</div><div id='share-button'>"+
-                      "<a class='whatsapp' href='whatsapp://send?text="+share_info+"' target='_blank'>"+"<i class='fab fa-whatsapp'></i></a>"+
-                      // "<a class='facebook fb-xfbml-parse-ignore' href='https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fbit.ly%2Fhk01wc18map&amp;src=sdkpreparse' target='_blank'>"+"<i class='fab fa-facebook'></i></a>"+
                       "<a class='twitter'  href='https://twitter.com/intent/tweet/?text="+share_info+"' target='_blank'>"+"<i class='fab fa-twitter'></i></a>"+
                       "<a class='telegram'  href='https://telegram.me/share/url?url=https://bit.ly/hk01wc18map&text="+share_info+"' target='_blank'>"+"<i class='fab fa-telegram'></i></a>"+
                       "<a class='copy' id='copyToClipboard' name = '"+ share_info +"' href='#' onclick=copyToClipboard()><i class='far fa-copy'></i></a>"+
@@ -303,10 +164,6 @@
               map.data.setStyle(function (feature) {
               return { icon: feature.getProperty('icon'), visible: false };
           });
-                
-          // map.data.setStyle({
-          //   icon: 'icon/soccer-ball.png'
-          // });
             // bounds of the desired area
             var bounds = new google.maps.LatLngBounds(
               new google.maps.LatLng(22.152842, 113.831202),
@@ -316,7 +173,6 @@
             var lastValidCenter = map.getCenter();
 
             map.addListener('center_changed', function() {
-              console.log("moved")
                 // if (bounds.contains(map.getCenter())) {
                 //     // still within valid bounds, so save the last valid position
                 //     lastValidCenter = map.getCenter();
@@ -394,65 +250,40 @@
             });
             map.fitBounds(bounds);
             //map.setZoom(15);
-
           });
 
+          // Onload
+          if (current_district != "all") {
+            map.panTo(temp_coord);
+            map.setZoom(temp_zoom);
+          } else
+          {
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+                };
 
-          // Try HTML5 geolocation.
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-              var pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-              };
-
-              //infowindow.setPosition(pos);
-              //infowindow.setContent('Location found.');
-              //infowindow.open(map);
-              map.setCenter(pos);
-            }, function() {
-              handleLocationError(true, infowindow, map.getCenter());
-            });
-          } else {
-            // Browser doesn't support Geolocation
-            handleLocationError(false, infowindow, map.getCenter());
+                //infowindow.setPosition(pos);
+                //infowindow.setContent('Location found.');
+                //infowindow.open(map);
+                map.setCenter(pos);
+              }, function() {
+                handleLocationError(true, infowindow, map.getCenter());
+              });
+            } else {
+              // Browser doesn't support Geolocation
+              handleLocationError(false, infowindow, map.getCenter());
+            }
           }
 
-
           // Create the search box and link it to the UI element.
-          //var mk = document.getElementsByClassName('poi');
           var poi_choice = document.getElementById('screen-selector');
-
-          //poi_choice.addEventListener('click', function() {
-
           poi_choice.addEventListener("click", function (event) {
               if (event.target !== event.currentTarget) {
-                  var clickedItem = event.target.id;
-                  console.log("Hello " + clickedItem);
-                  var temp_coord;
-                  var temp_zoom = 17;
-                  if (screen_width > 576) {
-                    if (clickedItem == "kl-mk-btn") temp_coord = {lat: 22.319300, lng: 114.169454};
-                    if (clickedItem == "kl-pw-btn") temp_coord = {lat: 22.324342, lng: 114.168280};
-                    if (clickedItem == "kl-tst-btn") temp_coord = {lat: 22.299375, lng: 114.175134};
-                    if (clickedItem == "hk-wc-btn") {temp_coord = {lat: 22.277516, lng: 114.173174};temp_zoom=18;};
-                    if (clickedItem == "hk-cwb-btn") temp_coord = {lat: 22.278375, lng: 114.182079};
-                    if (clickedItem == "hk-ct-btn") temp_coord = {lat: 22.282615, lng: 114.153344};
-                    if (clickedItem == "hk-sw-btn") temp_coord = {lat: 22.285057, lng: 114.147261};
-                    if (clickedItem == "kl-kt-btn") temp_coord = {lat: 22.313683, lng: 114.221671};
-                    if (clickedItem == "nt-tw-btn") temp_coord = {lat: 22.371299, lng: 114.115029};  
-                  } else {  // mobile screen
-                    if (clickedItem == "kl-mk-btn") {temp_coord = {lat: 22.319260, lng: 114.169320};temp_zoom=16;};
-                    if (clickedItem == "kl-pw-btn") {temp_coord = {lat: 22.325195, lng: 114.168205};temp_zoom=16;
-                      };
-                    if (clickedItem == "kl-tst-btn") temp_coord = {lat: 22.299375, lng: 114.175134};
-                    if (clickedItem == "hk-wc-btn") {temp_coord = {lat: 22.277721, lng: 114.172406};temp_zoom=17;};
-                    if (clickedItem == "hk-cwb-btn") temp_coord = {lat: 22.278375, lng: 114.182079};
-                    if (clickedItem == "hk-ct-btn") temp_coord = {lat: 22.282615, lng: 114.153344};
-                    if (clickedItem == "hk-sw-btn") temp_coord = {lat: 22.285057, lng: 114.147261};
-                    if (clickedItem == "kl-kt-btn") temp_coord = {lat: 22.313683, lng: 114.221671};
-                    if (clickedItem == "nt-tw-btn") {temp_coord = {lat: 22.371299, lng: 114.115029};temp_zoom=17;};                   
-                  }
+                  setScope("btn-id", event.target.id);
 
                   map.panTo(temp_coord);
                   map.setZoom(temp_zoom);
@@ -469,21 +300,30 @@
           infoWindow.open(map);
         }
 
+        function setScope(key, district) {
+          var i = findWithAttr(district_data, key, district);
+          current_district = district_data[i]['anchor'];
+          temp_coord = {
+              lat: (screen_width > 576) ? district_data[i]['lat'] : district_data[i]['mlat'],
+              lng: (screen_width > 576) ? district_data[i]['lng'] : district_data[i]['mlng']
+              }            
+          temp_zoom = (screen_width > 576) ? district_data[i]['zoom'] : district_data[i]['mzoom'];
+          temp_zoom = (temp_zoom != "") ? temp_zoom : 17;
+          console.log(current_district + " | " + temp_coord.lat + "," + temp_coord.lng + " | " + temp_zoom);
+        }
+
+
         function detectBrowser() {
           var useragent = navigator.userAgent;
           var mapdiv = document.getElementById("map");
-          console.log(screen.width);
+          console.log("Screen width: " + screen.width);
           screen_width = screen.width;
 
           if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
             mapdiv.style.width = '100%';
             mapdiv.style.height = '100%';
           } 
-
-          initMap()
         }
-
-
 
         function copyToClipboard() {
           const el = document.createElement('textarea');
@@ -501,7 +341,7 @@
       </script>
       <script src="src/markerclusterer.js"></script>
       <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY8m0DgOQR3CsKGxULgswQMNSN9RRyKpo&callback=detectBrowser&region=zh-TW&libraries=places"></script>
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY8m0DgOQR3CsKGxULgswQMNSN9RRyKpo&callback=init&region=zh-TW&libraries=places"></script>
     </div>
   </body>
 </html>
