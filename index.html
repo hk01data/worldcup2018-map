@@ -64,8 +64,9 @@
         // Detect 
         function detect_district() {
           var linkText = window.location.href;
+          console.log(linkText);
           var district = 'all';
-          if (linkText.match(/#/)) district = linkText.match(/#(.*)/)[1]
+          if (linkText.match(/#/)) district = linkText.match(/#(.*)/)[1];
           return district;
         }
       
