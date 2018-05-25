@@ -24,13 +24,13 @@
       </div>
       <div id="map"></div>
       <script>
-        var current_district;
+        var current_district = "all";
         var temp_zoom;
         var temp_coord;
 
         function init(){
           detectBrowser();
-          current_district = detect_district();
+          detect_district();
           console.log("Current district: " + current_district);
           if (current_district != "all") setScope("anchor", current_district);
           populateHeader(district_data);
@@ -64,10 +64,7 @@
         // Detect 
         function detect_district() {
           var linkText = window.location.href;
-          console.log(linkText);
-          var district = 'all';
-          if (linkText.match(/#/)) district = linkText.match(/#(.*)/)[1];
-          return district;
+          if (linkText.match(/#/)) current_district = linkText.match(/#(.*)/)[1];
         }
       
 
