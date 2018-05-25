@@ -27,10 +27,11 @@
         var current_district = "all";
         var temp_zoom;
         var temp_coord;
+        var screen_width;
 
         function init(){
           detectBrowser();
-          detect_district();
+          init_district();
           console.log("Current district: " + current_district);
           if (current_district != "all") setScope("anchor", current_district);
           populateHeader(district_data);
@@ -47,6 +48,18 @@
               return -1;
           }
 
+        function detectBrowser() {
+          var useragent = navigator.userAgent;
+          var mapdiv = document.getElementById("map");
+          console.log("Screen width: " + screen.width);
+          screen_width = screen.width;
+
+          if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
+            mapdiv.style.width = '100%';
+            mapdiv.style.height = '100%';
+          } 
+        }
+
         function populateHeader(jsonObj) {
           navbar = document.querySelector(".scrollmenu");
           var districts = jsonObj;
@@ -58,17 +71,17 @@
               ahref.setAttribute("id", districts[i]["btn-id"]);
               navbar.appendChild(listItem);
               listItem.appendChild(ahref);
+              if (current_district == districts[i]["anchor"]) listItem.setAttribute("class", "active");
             }
         }
 
-        // Detect 
-        function detect_district() {
+        // Set Entry District 
+        function init_district() {
           var linkText = window.location.href;
           if (linkText.match(/#/)) current_district = linkText.match(/#(.*)/)[1];
         }
       
-
-        var screen_width;
+        // Create Google Map
         function initMap() {
           var hk = {lat: 22.3750568, lng: 114.1050191}; //{lat: 22.3750568, lng: 114.1050191}; 
           var map = new google.maps.Map(document.getElementById('map'), {
@@ -283,6 +296,11 @@
               if (event.target !== event.currentTarget) {
                   setScope("btn-id", event.target.id);
 
+                  // Button style
+                  var pre_active = document.querySelectorAll(".active");
+                  pre_active[0].removeAttribute("class");
+                  event.target.parentNode.setAttribute("class", 'active');
+
                   map.panTo(temp_coord);
                   map.setZoom(temp_zoom);
               }
@@ -311,17 +329,6 @@
         }
 
 
-        function detectBrowser() {
-          var useragent = navigator.userAgent;
-          var mapdiv = document.getElementById("map");
-          console.log("Screen width: " + screen.width);
-          screen_width = screen.width;
-
-          if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
-            mapdiv.style.width = '100%';
-            mapdiv.style.height = '100%';
-          } 
-        }
 
         function copyToClipboard() {
           const el = document.createElement('textarea');

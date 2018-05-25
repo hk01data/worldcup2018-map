@@ -65,7 +65,8 @@
 
       .scrollmenu li {
           display: inline-block;
-          padding: 5px 8px;
+          padding: 3px 8px;
+          border-bottom: 3px solid transparent;
       }
 
       .scrollmenu li a {
@@ -74,12 +75,12 @@
       }
 
       .scrollmenu li:hover {
-          background-color: #fff;
+          border-bottom: 3px solid white;
       }      
 
-      .scrollmenu li:hover a{
-          color: #000;
-      }   
+      .scrollmenu li.active {
+          border-bottom: 3px solid white;
+      }
 
       /* width */
       ::-webkit-scrollbar {
