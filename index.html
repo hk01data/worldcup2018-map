@@ -78,6 +78,7 @@
         // Set Entry District 
         function init_district() {
           var linkText = window.location.href;
+          console.log("url: "+linkText);
           if (linkText.match(/#/)) current_district = linkText.match(/#(.*)/)[1];
         }
       
@@ -297,10 +298,9 @@
                   setScope("btn-id", event.target.id);
 
                   // Button style
-                  var pre_active = document.querySelectorAll(".active");
-                  pre_active[0].removeAttribute("class");
-                  event.target.parentNode.setAttribute("class", 'active');
-
+                  var pre_active = document.querySelector(".active");
+                  if (pre_active) pre_active.classList.toggle("active");
+                  event.target.parentNode.classList.toggle("active");
                   map.panTo(temp_coord);
                   map.setZoom(temp_zoom);
               }
