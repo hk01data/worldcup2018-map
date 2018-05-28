@@ -161,8 +161,9 @@
               // create a new marker cluster
               var markerCluster = new MarkerClusterer(map, markers, {
                   imagePath: 'markerclusterer/m',
-                  gridSize: 50,
-                  maxZoom: 16
+                  gridSize: 50
+                  //maxZoom: 16
+                  // zoomOnClick: false
               });
 
               // add event listener to the cluster
