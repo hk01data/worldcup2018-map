@@ -2,8 +2,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta charset="utf-8">
+    <title>01餐廳地圖</title>
+    <script src="library/piwik.min.js"></script>
+    <script src="https://www.googletagmanager.com/gtag/js"></script>
+    <script src="src/trackerClient.js"></script>
 
      <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -25,17 +30,31 @@
       <div id="map"></div>
       <script>
         var current_district = "all";
+        var isMobile = true;
         var temp_zoom;
         var temp_coord;
-        var screen_width;
+
+        var watchWidth = window.matchMedia("(max-width: 576px)");
+        watchWidth.addListener(checkScreenWidth) // Attach listener function on state changes
 
         function init(){
           detectBrowser();
+          checkScreenWidth(watchWidth);
           init_district();
           console.log("Current district: " + current_district);
           if (current_district != "all") setScope("anchor", current_district);
           populateHeader(district_data);
           initMap();
+        }
+
+
+        function checkScreenWidth(x) {
+            if (x.matches) { // If media query matches
+                isMobile = true;
+            } else {
+                isMobile = false;
+            }
+            console.log("is mobile:  "+ isMobile);
         }
 
 
@@ -52,7 +71,6 @@
           var useragent = navigator.userAgent;
           var mapdiv = document.getElementById("map");
           console.log("Screen width: " + screen.width);
-          screen_width = screen.width;
 
           if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
             mapdiv.style.width = '100%';
@@ -87,113 +105,124 @@
           var hk = {lat: 22.3750568, lng: 114.1050191}; //{lat: 22.3750568, lng: 114.1050191}; 
           var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 12, 
-            // minZoom: 11.5,
+            minZoom: 11.5,
             center: hk,
             mapTypeControl: false,
             streetViewControl: false,
             gestureHandling: "greedy"
           });
 
+          // Onload
+          if (current_district != "all") {
+            map.panTo(temp_coord);
+            map.setZoom(temp_zoom);
+          } else
+          {
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+                };
+                map.setCenter(pos);
+              }, function() {
+                console.log("GPS Located");
+              });
+            } else {
+              // Browser doesn't support Geolocation
+              console.log("Browser doesn't support Geolocation");
+            }
+          }
 
           // Load GeoJSON.
           map.data.loadGeoJson('src/restaurant.json', null, function(features) {
-      
               // group items / cluster
-              var infoWin = new google.maps.InfoWindow();
-              var markers = features.map(function(feature) {
-                  var g = feature.getGeometry();
+          var infoWin = new google.maps.InfoWindow();
+          var markers = features.map(function(feature) {
+              var g = feature.getGeometry();
 
-                  var marker = new google.maps.Marker({
-                      'position': g.get(0),
-                      'data' : feature,
-                      'icon' : 'markerclusterer/m1.png'
-                  });
-                google.maps.event.addListener(marker, 'click', function(evt) {
-                  var info_name = marker.data.f.name;
-                  var info_address = marker.data.f.address;
-                  var info_phone = marker.data.f.phone;
-                  var info_opening_hour = marker.data.f.opening_hour;
-                  var info_play_schedule = marker.data.f.play_schedule;
-                  var info_reservation = marker.data.f.reservation;
-                  var info_min_charge = marker.data.f.min_charge;
-                  var info_special_event = marker.data.f.special_event;
-
-                  var share_info = info_name + ' | ' + info_address;
-                  console.log(share_info);
-                  var content = "<div id='iw-container'>"+
-                  "<h6>"+info_name+"</h6>"+
-                    "<div class='info-content'>"+
-                      "<dl class='row'>"+
-                        "<dt class='col-1'><i class='fas fa-map-marker-alt'></i></dt><dd class='col-11'>"+info_address+"</dd>"+
-                        "<dt class='col-1'><i class='fas fa-phone'></i></dt><dd class='col-11'>"+info_phone+"</dd>"+
-                        "<dt class='col-1'><i class='far fa-clock'></i></dt><dd class='col-11'>"
-                  if (info_opening_hour) content += info_opening_hour;
-                  else content += "未有提供營業時間";
-                     content += "</dd>"+
-                        "<dt class='col-1'><i class='fas fa-calendar-alt'></i></dt><dd class='col-11'>播放場次："
-                  if (info_play_schedule) content += info_play_schedule;
-                  else content += "未有提供";
-                     content += "</dd>"+
-                        "<dt class='col-1'><i class='fas fa-phone-volume'></i></dt><dd class='col-11'>訂位："
-                  if (info_reservation) content += info_reservation;
-                  else content += "不用";
-                     content += "</dd>"+
-                        "<dt class='col-1'><i class='fas fa-dollar-sign'></i></dt><dd class='col-11'>最低消費："
-                  if (info_min_charge) content += info_min_charge;
-                  else content += "沒有";
-                    content += "</dd></dl>"
-                  if (info_special_event) content += info_special_event;
-                    content += "</div><div id='share-button'>";
-                  if (screen_width < 576)  content += "<a class='whatsapp' href='whatsapp://send?text="+share_info+"' target='_blank'>"+"<i class='fab fa-whatsapp'></i></a>";
-
-                    content +=
-                      "<a class='twitter'  href='https://twitter.com/intent/tweet/?text="+share_info+"' target='_blank'>"+"<i class='fab fa-twitter'></i></a>"+
-                      "<a class='telegram'  href='https://telegram.me/share/url?url=https://bit.ly/hk01wc18map&text="+share_info+"' target='_blank'>"+"<i class='fab fa-telegram'></i></a>"+
-                      "<a class='copy' id='copyToClipboard' name = '"+ share_info +"' href='#' onclick=copyToClipboard()><i class='far fa-copy'></i></a>"+
-                    "</div>"+
-                  "</div>"
-                  infoWin.setContent(content);
-                  infoWin.open(map, marker);
-                })
-                  return marker;
+              var marker = new google.maps.Marker({
+                  'position': g.get(0),
+                  'data' : feature,
+                  'icon' : 'markerclusterer/m1.png'
               });
+            google.maps.event.addListener(marker, 'click', function(evt) {
+              var info_name = marker.data.f.name;
+              var info_address = marker.data.f.address;
+              var info_phone = marker.data.f.phone;
+              var info_opening_hour = marker.data.f.opening_hour;
+              var info_play_schedule = marker.data.f.play_schedule;
+              var info_reservation = marker.data.f.reservation;
+              var info_min_charge = marker.data.f.min_charge;
+              var info_special_event = marker.data.f.special_event;
 
-              // create a new marker cluster
-              var markerCluster = new MarkerClusterer(map, markers, {
-                  imagePath: 'markerclusterer/m',
-                  gridSize: 50
-                  //maxZoom: 16
-                  // zoomOnClick: false
-              });
+              var share_info = info_name + ' | ' + info_address;
+              console.log(share_info);
+              var content = "<div id='iw-container'>"+
+              "<h6>"+info_name+"</h6>"+
+                "<div class='info-content'>"+
+                  "<dl class='row'>"+
+                    "<dt class='col-1'><i class='fas fa-map-marker-alt'></i></dt><dd class='col-11'>"+info_address+"</dd>"+
+                    "<dt class='col-1'><i class='fas fa-phone'></i></dt><dd class='col-11'>"+info_phone+"</dd>"+
+                    "<dt class='col-1'><i class='far fa-clock'></i></dt><dd class='col-11'>"
+              if (info_opening_hour) content += info_opening_hour;
+              else content += "未有提供營業時間";
+                 content += "</dd>"+
+                    "<dt class='col-1'><i class='fas fa-calendar-alt'></i></dt><dd class='col-11'>播放場次："
+              if (info_play_schedule) content += info_play_schedule;
+              else content += "未有提供";
+                 content += "</dd>"+
+                    "<dt class='col-1'><i class='fas fa-phone-volume'></i></dt><dd class='col-11'>訂位："
+              if (info_reservation) content += info_reservation;
+              else content += "不用";
+                 content += "</dd>"+
+                    "<dt class='col-1'><i class='fas fa-dollar-sign'></i></dt><dd class='col-11'>最低消費："
+              if (info_min_charge) content += info_min_charge;
+              else content += "沒有";
+                content += "</dd></dl>"
+              if (info_special_event) content += info_special_event;
+                content += "</div><div id='share-button'>";
+              if (isMobile)  content += "<a class='whatsapp' href='whatsapp://send?text="+share_info+"' target='_blank'>"+"<i class='fab fa-whatsapp'></i></a>";
 
-              // add event listener to the cluster
-              google.maps.event.addListener(markerCluster, 'clusterclick', function (cluster) {
-               // handle clickevent
-              });
-
+                content +=
+                  "<a class='twitter'  href='https://twitter.com/intent/tweet/?text="+share_info+"' target='_blank'>"+"<i class='fab fa-twitter'></i></a>"+
+                  "<a class='telegram'  href='https://telegram.me/share/url?url=https://bit.ly/hk01wc18map&text="+share_info+"' target='_blank'>"+"<i class='fab fa-telegram'></i></a>"+
+                  "<a class='copy' id='copyToClipboard' name = '"+ share_info +"' href='#' onclick=copyToClipboard()><i class='far fa-copy'></i></a>"+
+                "</div>"+
+              "</div>"
+              infoWin.setContent(content);
+              infoWin.open(map, marker);
+            })
+              return marker;
           });
 
-              map.data.setStyle(function (feature) {
+          // create a new marker cluster
+          var markerCluster = new MarkerClusterer(map, markers, {
+                  imagePath: 'markerclusterer/m',
+                  gridSize: 50,
+                  //maxZoom: 16
+                  zoomOnClick: true
+              });
+          });
+
+          map.data.setStyle(function (feature) {
               return { icon: feature.getProperty('icon'), visible: false };
           });
-            // bounds of the desired area
-            var bounds = new google.maps.LatLngBounds(
-              new google.maps.LatLng(22.152842, 113.831202),
-              new google.maps.LatLng(22.644851, 114.455809)
-              );
 
-            var lastValidCenter = map.getCenter();
+          // Set Bound
+          var bounds = new google.maps.LatLngBounds(
+            new google.maps.LatLng(22.152842, 113.831202),
+            new google.maps.LatLng(22.644851, 114.455809)
+            );
 
-            map.addListener('center_changed', function() {
-                // if (bounds.contains(map.getCenter())) {
-                //     // still within valid bounds, so save the last valid position
-                //     lastValidCenter = map.getCenter();
-                //     return; 
-                // }
-                // not valid anymore => return to last valid position
-                map.panToBounds(bounds);
-            });
-          // Set mouseover event for each feature.
+          var lastValidCenter = map.getCenter();
+
+          map.addListener('center_changed', function() {
+              if (!bounds.contains(map.getCenter())) {
+                  map.panToBounds(bounds);
+              }
+          });
 
         // This example adds a search box to a map, using the Google Place Autocomplete
         // feature. People can enter geographical searches. The search box will return a
@@ -205,14 +234,7 @@
 
           // Create the search box and link it to the UI element.
           var input = document.getElementById('pac-input');
-          var searchBox = new google.maps.places.SearchBox(input);
-
-          // Bias the SearchBox results towards current map's viewport.
-          map.addListener('bounds_changed', function() {
-            searchBox.setBounds(map.getBounds());
-          });
-
-          searchBox.setBounds(bounds);
+          var searchBox = new google.maps.places.SearchBox(input, {bounds: bounds});
 
           var markers = [];
 
@@ -262,36 +284,9 @@
               }
             });
             map.fitBounds(bounds);
-            //map.setZoom(15);
           });
 
-          // Onload
-          if (current_district != "all") {
-            map.panTo(temp_coord);
-            map.setZoom(temp_zoom);
-          } else
-          {
-            // Try HTML5 geolocation.
-            if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(function(position) {
-                var pos = {
-                  lat: position.coords.latitude,
-                  lng: position.coords.longitude
-                };
-
-                //infowindow.setPosition(pos);
-                //infowindow.setContent('Location found.');
-                //infowindow.open(map);
-                map.setCenter(pos);
-              }, function() {
-                handleLocationError(true, infowindow, map.getCenter());
-              });
-            } else {
-              // Browser doesn't support Geolocation
-              handleLocationError(false, infowindow, map.getCenter());
-            }
-          }
-
+        
           // Create the search box and link it to the UI element.
           var poi_choice = document.getElementById('screen-selector');
           poi_choice.addEventListener("click", function (event) {
@@ -309,27 +304,17 @@
           }, false);
         }
 
-        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-          infoWindow.setPosition(pos);
-          infoWindow.setContent(browserHasGeolocation ?
-                                'Error: The Geolocation service failed.' :
-                                'Error: Your browser doesn\'t support geolocation.');
-          infoWindow.open(map);
-        }
-
         function setScope(key, district) {
           var i = findWithAttr(district_data, key, district);
           current_district = district_data[i]['anchor'];
           temp_coord = {
-              lat: (screen_width > 576) ? district_data[i]['lat'] : district_data[i]['mlat'],
-              lng: (screen_width > 576) ? district_data[i]['lng'] : district_data[i]['mlng']
+              lat: (isMobile) ? district_data[i]['mlat'] : district_data[i]['lat'],
+              lng: (isMobile) ? district_data[i]['mlng'] : district_data[i]['lng']
               }            
-          temp_zoom = (screen_width > 576) ? district_data[i]['zoom'] : district_data[i]['mzoom'];
+          temp_zoom = (isMobile) ? district_data[i]['mzoom'] : district_data[i]['zoom'];
           temp_zoom = (temp_zoom != "") ? temp_zoom : 17;
           console.log(current_district + " | " + temp_coord.lat + "," + temp_coord.lng + " | " + temp_zoom);
         }
-
-
 
         function copyToClipboard() {
           const el = document.createElement('textarea');
@@ -345,6 +330,7 @@
       }
 
       </script>
+      <script src="src/fireEvent.js"></script>
       <script src="src/markerclusterer.js"></script>
       <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY8m0DgOQR3CsKGxULgswQMNSN9RRyKpo&callback=init&language=zh-TW&region=HK&libraries=places"></script>
