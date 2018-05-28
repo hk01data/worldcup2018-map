@@ -208,13 +208,14 @@
           var searchBox = new google.maps.places.SearchBox(input);
 
           // Bias the SearchBox results towards current map's viewport.
-          // map.addListener('bounds_changed', function() {
-          //   searchBox.setBounds(map.getBounds());
-          // });
+          map.addListener('bounds_changed', function() {
+            searchBox.setBounds(map.getBounds());
+          });
 
           searchBox.setBounds(bounds);
 
           var markers = [];
+
           // Listen for the event fired when the user selects a prediction and retrieve
           // more details for that place.
           searchBox.addListener('places_changed', function() {
@@ -346,7 +347,7 @@
       </script>
       <script src="src/markerclusterer.js"></script>
       <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY8m0DgOQR3CsKGxULgswQMNSN9RRyKpo&callback=init&region=zh-TW&libraries=places"></script>
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY8m0DgOQR3CsKGxULgswQMNSN9RRyKpo&callback=init&language=zh-TW&region=HK&libraries=places"></script>
     </div>
   </body>
 </html>
