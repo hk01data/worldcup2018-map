@@ -21,7 +21,6 @@ const article_id = "163141";
 
 function fire_custom_url (url) {
   try {
-    console.log(url);
     // Send Pageview for Map
     myTracker.pageView({
       GA: true,
