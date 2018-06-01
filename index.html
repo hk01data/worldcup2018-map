@@ -564,16 +564,12 @@
 
             //console.log(this.gm_bindings_.bounds[69].jd.formattedPrediction);
             var places = searchBox.getPlaces();
-            var user_input;
-            if (places.length == 0) {
-              return;
-            } else if (places.length > 1) { // User press enter directly 
-              user_input = document.getElementById('pac-input').value;
-            } else {
-              user_input = places[0].formatted_address;
-            }
-            // console.log(places);
-            // console.log(user_input);
+            var user_input = document.getElementById('pac-input').value;
+
+            console.log(places);     
+            console.log("length:" + places.length);
+            console.log("user_input: " + user_input);
+
             // Event - Calculate how many unique user had access the map
             fire_events("wcmap_search", "search", {
               'keyword': user_input,
