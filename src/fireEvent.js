@@ -30,7 +30,7 @@ function fire_custom_url (url) {
       2: section,
       3: channel,
       5: article_id
-    }, url);
+    }, url, removehash(window.location.href).replace(window.location.origin,''));
     console.log("Map PV - custom urlfired: " + url);
 
     // Send Pageview for article
