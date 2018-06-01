@@ -2,10 +2,48 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta charset="utf-8">
-    <title>01餐廳地圖</title>
+
+    <title>全城足球狂熱 |  今晚去邊睇波好？全港通宵餐廳、酒吧優惠地圖</title>
+    <meta name="author" content="香港01">
+    <meta name="description" content="睇盡世界盃足球賽時間表，賽程表，積分榜、球員射手榜，助攻榜，仲有各國國家隊實力分析，即時比分及賽果等足球新聞報導。仲有唔同範疇世界盃資訊，如睇波好去處，球員週邊新聞，直播賽事的手機app攻略大全，同你緊貼世界盃大小事。">
+    <meta name="publisher" content="HK01">
+
+    <!--favicon-->
+    <link rel="icon" type="image/x-icon" href="https://wc2018.hk01.com/assets/images/favicon/favicon-16x16.ico"/>
+
+    <!--canonical-->
+    <link rel="canonical" href="https://wc2018.hk01.com/landing">
+
+    <!--twitter-->
+    <meta name="twitter:description" content="睇盡世界盃足球賽時間表，賽程表，積分榜、球員射手榜，助攻榜，仲有各國國家隊實力分析，即時比分及賽果等足球新聞報導。仲有唔同範疇世界盃資訊，如睇波好去處，球員週邊新聞，直播賽事的手機app攻略大全，同你緊貼世界盃大小事。">
+    <meta name="twitter:image:src" content="https://wc2018.hk01.com/assets/images/background/wc2018-og.jpg">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="全城足球狂熱 | 最新2018世界足球盛事資訊，包括賽程表、積分榜、精華片段">
+    <meta name="twitter:url" content="https://wc2018.hk01.com/landing">
+    <meta name="twitter:site" content="@hk01wemedia">
+    <meta name="twitter:creator" content="@hk01wemedia">
+    <meta name="twitter:domain" content="hk01.com">
+
+    <!--fb-->
+    <meta property="article:author" content="https://business.facebook.com/hk01.sports/"/>
+    <meta property="article:publisher" content="https://business.facebook.com/hk01.sports/"/>
+
+    <!--fb-->
+    <meta property="fb:app_id" content="1651866545051541"/>
+    <meta property="fb:pages" content=""/>
+
+    <!--og-->
+    <meta property="og:description" content="睇盡世界盃足球賽時間表，賽程表，積分榜、球員射手榜，助攻榜，仲有各國國家隊實力分析，即時比分及賽果等足球新聞報導。仲有唔同範疇世界盃資訊，如睇波好去處，球員週邊新聞，直播賽事的手機app攻略大全，同你緊貼世界盃大小事。"/>
+    <meta property="og:image" content="https://wc2018.hk01.com/assets/images/background/wc2018-og.jpg"/>
+    <meta property="og:site_name" content="香港01"/>
+    <meta property="og:title" content="全城足球狂熱 | 最新2018世界足球盛事資訊，包括賽程表、積分榜、精華片段"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://wc2018.hk01.com/live-football-map"/>
+
     <script src="library/piwik.min.js"></script>
     <script src="https://www.googletagmanager.com/gtag/js"></script>
     <script src="src/trackerClient.js"></script>
@@ -18,14 +56,53 @@
 
 
     <link rel="stylesheet" href="src/style.css" crossorigin="anonymous">
- 
     <script type="text/javascript" src="src/districts.js"></script>
   </head>
   <body>
+  <!-- Load Facebook SDK for JavaScript -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&version=v3.0&appId=644273552421587&autoLogAppEvents=1';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
     <div id="bigcontainer">
       <div id="header">
-        <input id="pac-input" class="form-control" type="text" placeholder="搜尋餐廳">
-        <ul class="scrollmenu" id="screen-selector"></ul>
+     <div class="input-group">
+        <span class="input-group-addon bg-white"><i class="fas fa-search"></i></span>
+        <input class="form-control border-0" id="pac-input" type="text" placeholder="搜尋餐廳">
+    </div>
+
+    <div class="row container-fluid" id="nav-bar">
+      <div class="burger col-1">
+        <div id="nav-icon">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+      <ul id="scrollmenu" class="col-11 screen-selector"></ul>
+    </div>
+
+    <div id="myNav" class="overlay">
+      <div class="overlay-content">
+        <h6>請選擇地區</h6>
+        <div id="navmenu" class="screen-selector container"></div>
+        <div id="nav-share-button">
+          <a class="facebook fb-share-button" data-href="https://wc2018.hk01.com/live-football-map" data-layout="button_count" target="_blank"><i class="fab fa-facebook"></i></a>
+          <a class="whatsapp" href="whatsapp://send?text=01睇波地圖" target="_blank"><i class="fab fa-whatsapp"></i></a>
+          <a class="twitter" href="https://twitter.com/intent/tweet/?text=01睇波地圖" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a class="telegram" href="https://telegram.me/share/url?url=https://wc2018.hk01.com/live-football-map&text=01睇波地圖" target="_blank"><i class="fab fa-telegram"></i></a>
+          <a class="copy" id="copyToClipboard" name="01睇波地圖" href="#" onclick="copyToClipboard()"><i class="far fa-copy"></i></a>
+        </div>
+        <p class="text-center font-weight-light">香港01有限公司版權所有 © 2018</p>
+      </div>
+    </div>
+
       </div>
       <div id="map"></div>
       <script>
@@ -37,16 +114,59 @@
         var watchWidth = window.matchMedia("(max-width: 576px)");
         watchWidth.addListener(checkScreenWidth) // Attach listener function on state changes
 
-        function init(){
+
+
+        function addLoadEvent(func) {
+          var oldonload = window.onload;
+          if (typeof window.onload != 'function') {
+            window.onload = func;
+          } else {
+            window.onload = function() {
+              if (oldonload) {
+                oldonload();
+              }
+              func();
+            }
+          }
+        }
+
+
+        addLoadEvent(function() {
           detectBrowser();
           checkScreenWidth(watchWidth);
           init_district();
-          console.log("Current district: " + current_district);
+          console.log("anchor: " + current_district);
           if (current_district != "all") setScope("anchor", current_district);
           populateHeader(district_data);
+          populateNavBar(district_data);
+          navButtonListener();
+          navShareBtnListener();
           initMap();
-        }
 
+
+          // Pageview - Original Page View send to both Piwik and Google Analytics
+          fire_custom_url(removehash(window.location.href)); 
+
+          // Event - Calculate how many unique user had access the map
+          fire_events("wcmap_landing", "view", {
+            'start_location': current_district,
+            'related_article': 163141,
+            'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+            'ts': Date.now()
+          });
+        });
+
+
+        // Look for .hamburger
+        var hamburger = document.getElementById("nav-icon");
+        // On click
+        hamburger.addEventListener("click", function() {
+          hamburger.classList.toggle("open");
+          if (hamburger.classList.contains("open")) 
+            document.getElementById("myNav").style.height = "100%";
+          else 
+            document.getElementById("myNav").style.height = "0%";
+        });
 
         function checkScreenWidth(x) {
             if (x.matches) { // If media query matches
@@ -79,18 +199,111 @@
         }
 
         function populateHeader(jsonObj) {
-          navbar = document.querySelector(".scrollmenu");
+          navbar = document.querySelector("#scrollmenu");
           var districts = jsonObj;
            for (var i = 0; i < districts.length; i++) { 
               var listItem = document.createElement('li');
               var ahref = document.createElement("a");
               ahref.textContent = districts[i].display_name;
-              ahref.setAttribute("href", '#'+districts[i]["anchor"]);
-              ahref.setAttribute("id", districts[i]["btn-id"]);
+              ahref.setAttribute("href", "#"+districts[i]["anchor"]);
+              ahref.setAttribute("name", districts[i]["btn-id"]);
+              ahref.classList.toggle("wcmap_menu");
               navbar.appendChild(listItem);
               listItem.appendChild(ahref);
-              if (current_district == districts[i]["anchor"]) listItem.setAttribute("class", "active");
+              if (current_district == districts[i]["anchor"]) listItem.classList.toggle("active");
             }
+        }
+
+        function populateNavBar(jsonObj) {
+          navbar = document.querySelector("#navmenu");
+          var districts = jsonObj;
+          var no_of_row = districts.length/3;
+           for (var i = 0; i < no_of_row; i++) { 
+              var rowItem = document.createElement('div');
+              rowItem.classList.toggle("row");
+              navbar.appendChild(rowItem);
+              for (var j = 0; j < 3; j++) {
+                var colItem = document.createElement('div');
+                colItem.classList.toggle("col");
+                var ahref = document.createElement("a");
+                rowItem.appendChild(colItem);
+                if (i*3+j < districts.length) {
+                  ahref.textContent = districts[i*3+j].display_name;
+                  ahref.setAttribute("href", "#"+districts[i*3+j]["anchor"]);
+                  ahref.setAttribute("name", districts[i*3+j]["btn-id"]);
+                  ahref.setAttribute("role", "button");
+                  ahref.classList.toggle("btn");
+                  ahref.classList.toggle("btn-block");
+                  ahref.classList.toggle("btn-outline-dark");
+                  ahref.classList.toggle("wcmap_menu");
+                  colItem.appendChild(ahref);
+                }                
+              }
+              // listItem.appendChild(ahref);
+              // if (current_district == districts[i]["anchor"]) listItem.setAttribute("class", "active");
+            }
+        }
+
+        function navButtonListener() {
+          var nav_btns = document.querySelectorAll(".wcmap_menu");
+          for (var i=0; i<nav_btns.length; i++) {
+            nav_btns[i].addEventListener("click", function (event) {
+              // Event - User click the location on menu bar
+              fire_events("wcmap_menu", "click", {
+                'location': current_district,
+                'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+                'ts': Date.now()
+              });
+
+              // Pageview - Send the PV with modified link and dimension
+              fire_custom_url(removehash(window.location.href));
+            });
+          }
+        }
+
+        function navShareBtnListener() {
+          var nav_share_btns = document.querySelectorAll("#nav-share-button a");
+          for (var i=0; i<nav_share_btns.length; i++) {
+            nav_share_btns[i].addEventListener("click", function (event) {
+              // Event - User click the share button of the page
+              fire_events("wcmap_share", "share", {
+                'share_channel': this.className,
+                'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+                'ts': Date.now()
+              });
+            });
+          }
+        }
+
+        function mkrShareBtnListener(cat, name, lat, lng) {
+          var share_btns = document.querySelectorAll("#share-button a");
+          for (var i=0; i<share_btns.length; i++) {
+            share_btns[i].addEventListener("click", function (event) {
+              var temp_label = {};
+              if (cat == "wcmap_rest_marker") {
+                  temp_label = {
+                  'share_channel': this.className,
+                  'rest_name': name,
+                  'rest_lat': lat,
+                  'rest_lon': lng,
+                  'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+                  'ts': Date.now()
+                }
+              } else if (cat == "wcmap_event_marker") {
+                temp_label = {
+                  'share_channel': this.className,
+                  'event_name': name,
+                  'event_lat': lat,
+                  'event_lon': lng,
+                  'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+                  'ts': Date.now()
+                }
+              }
+
+              // Event - User click the share button on events
+              fire_events(cat, "share", temp_label);
+            });
+          }
         }
 
         // Set Entry District 
@@ -99,16 +312,17 @@
           console.log("url: "+linkText);
           if (linkText.match(/#/)) current_district = linkText.match(/#(.*)/)[1];
         }
-      
+
         // Create Google Map
         function initMap() {
-          var hk = {lat: 22.3750568, lng: 114.1050191}; //{lat: 22.3750568, lng: 114.1050191}; 
+          var hk = {lat: 22.319283, lng: 114.169340}; // {lat: 22.3750568, lng: 114.1050191};
           var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 12, 
-            minZoom: 11.5,
+            minZoom: 10,
             center: hk,
             mapTypeControl: false,
             streetViewControl: false,
+            clickableIcons: false,
             gestureHandling: "greedy",
             fullscreenControlOptions : {
               position: google.maps.ControlPosition.RIGHT_BOTTOM
@@ -129,8 +343,8 @@
                   lng: position.coords.longitude
                 };
                 map.setCenter(pos);
-              }, function() {
                 console.log("GPS Located");
+              }, function() {
               });
             } else {
               // Browser doesn't support Geolocation
@@ -138,10 +352,14 @@
             }
           }
 
+          var restLayer = new google.maps.Data();
+          var eventLayer = new google.maps.Data();
+
           // Load GeoJSON.
-          map.data.loadGeoJson('src/restaurant.json', null, function(features) {
+          restLayer.loadGeoJson('src/restaurant.js', null, function(features) {
               // group items / cluster
-          var infoWin = new google.maps.InfoWindow();
+          var restInfowindow = new google.maps.InfoWindow();
+          //var eventInfowindow = new google.maps.InfoWindow();
           var markers = features.map(function(feature) {
               var g = feature.getGeometry();
 
@@ -150,67 +368,165 @@
                   'data' : feature,
                   'icon' : 'markerclusterer/m1.png'
               });
-            google.maps.event.addListener(marker, 'click', function(evt) {
-              var info_name = marker.data.f.name;
-              var info_address = marker.data.f.address;
-              var info_phone = marker.data.f.phone;
-              var info_opening_hour = marker.data.f.opening_hour;
-              var info_play_schedule = marker.data.f.play_schedule;
-              var info_reservation = marker.data.f.reservation;
-              var info_min_charge = marker.data.f.min_charge;
-              var info_special_event = marker.data.f.special_event;
+              google.maps.event.addListener(marker, 'click', function(evt) {
+                eventInfowindow.close(); // Close all windows;
 
-              var share_info = info_name + ' | ' + info_address;
-              console.log(share_info);
-              var content = "<div id='iw-container'>"+
-              "<h6>"+info_name+"</h6>"+
-                "<div class='info-content'>"+
-                  "<dl class='row'>"+
-                    "<dt class='col-1'><i class='fas fa-map-marker-alt'></i></dt><dd class='col-11'>"+info_address+"</dd>"+
-                    "<dt class='col-1'><i class='fas fa-phone'></i></dt><dd class='col-11'>"+info_phone+"</dd>"+
-                    "<dt class='col-1'><i class='far fa-clock'></i></dt><dd class='col-11'>"
-              if (info_opening_hour) content += info_opening_hour;
-              else content += "未有提供營業時間";
-                 content += "</dd>"+
-                    "<dt class='col-1'><i class='fas fa-calendar-alt'></i></dt><dd class='col-11'>播放場次："
-              if (info_play_schedule) content += info_play_schedule;
-              else content += "未有提供";
-                 content += "</dd>"+
-                    "<dt class='col-1'><i class='fas fa-phone-volume'></i></dt><dd class='col-11'>訂位："
-              if (info_reservation) content += info_reservation;
-              else content += "不用";
-                 content += "</dd>"+
-                    "<dt class='col-1'><i class='fas fa-dollar-sign'></i></dt><dd class='col-11'>最低消費："
-              if (info_min_charge) content += info_min_charge;
-              else content += "沒有";
-                content += "</dd></dl>"
-              if (info_special_event) content += info_special_event;
-                content += "</div><div id='share-button'>";
-              if (isMobile)  content += "<a class='whatsapp' href='whatsapp://send?text="+share_info+"' target='_blank'>"+"<i class='fab fa-whatsapp'></i></a>";
+                var info_name = this.data.f.name;
+                var info_address = this.data.f.address;
+                var info_phone = this.data.f.phone;
+                var info_opening_hour = this.data.f.opening_hour;
+                var info_play_schedule = this.data.f.play_schedule;
+                var info_reservation = this.data.f.reservation;
+                var info_min_charge = this.data.f.min_charge;
+                var info_special_event = this.data.f.special_event;
 
-                content +=
-                  "<a class='twitter'  href='https://twitter.com/intent/tweet/?text="+share_info+"' target='_blank'>"+"<i class='fab fa-twitter'></i></a>"+
-                  "<a class='telegram'  href='https://telegram.me/share/url?url=https://bit.ly/hk01wc18map&text="+share_info+"' target='_blank'>"+"<i class='fab fa-telegram'></i></a>"+
-                  "<a class='copy' id='copyToClipboard' name = '"+ share_info +"' href='#' onclick=copyToClipboard()><i class='far fa-copy'></i></a>"+
-                "</div>"+
-              "</div>"
-              infoWin.setContent(content);
-              infoWin.open(map, marker);
-            })
+                var marker_lat = evt.latLng.lat();
+                var marker_lng = evt.latLng.lng();
+
+                var share_info = info_name + ' | ' + info_address;
+                console.log(share_info);
+                window.history.pushState("object or string", "Title", "#"+share_info);
+                // url remove # myTracker.pageView
+
+                var content = "<div id='iw-container'>"+
+                "<h6>"+info_name+"</h6>"+
+                  "<div class='info-content'>"+
+                    "<dl class='row'>"+
+                      "<dt class='col-1'><i class='fas fa-map-marker-alt'></i></dt><dd class='col-11'>"+info_address+"</dd>"+
+                      "<dt class='col-1'><i class='fas fa-phone'></i></dt><dd class='col-11'>"+info_phone+"</dd>"+
+                      "<dt class='col-1'><i class='far fa-clock'></i></dt><dd class='col-11'>"
+                if (info_opening_hour) content += info_opening_hour;
+                else content += "未有提供營業時間";
+                   content += "</dd>"+
+                      "<dt class='col-1'><i class='fas fa-calendar-alt'></i></dt><dd class='col-11'>播放場次："
+                if (info_play_schedule) content += info_play_schedule;
+                else content += "未有提供";
+                   content += "</dd>"+
+                      "<dt class='col-1'><i class='fas fa-phone-volume'></i></dt><dd class='col-11'>訂位："
+                if (info_reservation) content += info_reservation;
+                else content += "不用";
+                   content += "</dd>"+
+                      "<dt class='col-1'><i class='fas fa-dollar-sign'></i></dt><dd class='col-11'>最低消費："
+                if (info_min_charge) content += info_min_charge;
+                else content += "沒有";
+                  content += "</dd></dl>"
+                if (info_special_event) content += info_special_event;
+                  content += "</div><div id='share-button'>";
+                if (isMobile)  content += "<a class='whatsapp' href='whatsapp://send?text="+share_info+"' target='_blank'>"+"<i class='fab fa-whatsapp'></i></a>";
+
+                  content +=
+                    "<a class='twitter'  href='https://twitter.com/intent/tweet/?text="+share_info+"' target='_blank'>"+"<i class='fab fa-twitter'></i></a>"+
+                    "<a class='telegram'  href='https://telegram.me/share/url?url=https://wc2018.hk01.com/live-football-map&text="+share_info+"' target='_blank'>"+"<i class='fab fa-telegram'></i></a>"+
+                    "<a class='copy' id='copyToClipboard' name = '"+ share_info +"' href='#' onclick=copyToClipboard()><i class='far fa-copy'></i></a>"+
+                  "</div>"+
+                "</div>"
+
+                restInfowindow.setContent(content);
+                restInfowindow.open(map, marker);
+
+                // Pageview - Send the PV with modified link and dimension
+                fire_custom_url(removehash(window.location.href)); 
+
+                // Event - User click the restaurant icon and see their detail
+                fire_events("wcmap_rest_marker", "click", {
+                  'rest_name': share_info,
+                  'rest_lat': marker_lat,
+                  'rest_lon': marker_lng,
+                  'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+                  'ts': Date.now()
+                });
+
+                // Event - User click the share button on restaurant
+                mkrShareBtnListener("wcmap_rest_marker", share_info, marker_lat, marker_lng);
+
+              })
               return marker;
           });
+
 
           // create a new marker cluster
           var markerCluster = new MarkerClusterer(map, markers, {
                   imagePath: 'markerclusterer/m',
                   gridSize: 50,
-                  //maxZoom: 16
+                  maxZoom: 16,
                   zoomOnClick: true
               });
           });
 
-          map.data.setStyle(function (feature) {
+          restLayer.setStyle(function (feature) {
               return { icon: feature.getProperty('icon'), visible: false };
+          });
+
+
+          eventLayer.loadGeoJson('src/event.js', null, function(features) {});
+          eventLayer.setMap(map);
+
+
+          // global infowindow
+          var eventInfowindow = new google.maps.InfoWindow();
+
+          // When the user clicks, open an infowindow
+          eventLayer.addListener('click', function(evt) {
+
+              var event_lat = evt.latLng.lat();
+              var event_lng = evt.latLng.lng();
+
+
+              var share_info = evt.feature.getProperty("銀行牌子") + " | " +evt.feature.getProperty("address");
+              
+              window.history.pushState("object or string", "Title", "#"+share_info);
+              
+              var content = "<div id='iw-container'>"+
+              "<h6>"+evt.feature.getProperty("銀行牌子")+"</h6>";
+
+              content += "</div><a href='#' role='button' class='register btn btn-block btn-primary'>報名</a><div id='share-button'>";
+              if (isMobile)  content += "<a class='whatsapp' href='whatsapp://send?text="+share_info+"' target='_blank'>"+"<i class='fab fa-whatsapp'></i></a>";
+
+
+                content +=
+                  "<a class='twitter'  href='https://twitter.com/intent/tweet/?text="+share_info+"' target='_blank'>"+"<i class='fab fa-twitter'></i></a>"+
+                  "<a class='telegram'  href='https://telegram.me/share/url?url=https://wc2018.hk01.com/live-football-map&text="+share_info+"' target='_blank'>"+"<i class='fab fa-telegram'></i></a>"+
+                  "<a class='copy' id='copyToClipboard' name = '"+ share_info +"' href='#' onclick=copyToClipboard()><i class='far fa-copy'></i></a>";
+
+                content +="</div>";
+              eventInfowindow.setContent(content);
+              eventInfowindow.setPosition(evt.feature.getGeometry().get());
+              eventInfowindow.setOptions({pixelOffset: new google.maps.Size(0,-30)});
+              eventInfowindow.open(map);
+
+              // Pageview - Send the PV with modified link and dimension
+              fire_custom_url(removehash(window.location.href)); 
+
+              // Event - User click the restaurant icon and see their detail
+              fire_events("wcmap_event_marker", "click", {
+                'event_name': share_info,
+                'event_lat': event_lat,
+                'event_lon': event_lng,
+                'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+                'ts': Date.now()
+              });
+
+
+              // Event - 
+              mkrShareBtnListener("wcmap_event_marker", share_info, event_lat, event_lng);
+
+
+              // Event - User click the to register the event
+              var reg_button = document.querySelector("a.register");
+              reg_button.addEventListener("click", function (event) {
+                fire_events("wcmap_event_reg", "click", {
+                  'event_name': share_info,
+                  'event_lat': event_lat,
+                  'event_lon': event_lng,
+                  'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+                  'ts': Date.now()
+                });
+              })
+
+          });  
+
+          eventLayer.setStyle({
+            icon: 'icon/event.png'
           });
 
           // Set Bound
@@ -241,13 +557,29 @@
 
           var markers = [];
 
+
           // Listen for the event fired when the user selects a prediction and retrieve
           // more details for that place.
           searchBox.addListener('places_changed', function() {
+
+            //console.log(this.gm_bindings_.bounds[69].jd.formattedPrediction);
             var places = searchBox.getPlaces();
+            var user_input;
             if (places.length == 0) {
               return;
+            } else if (places.length > 1) { // User press enter directly 
+              user_input = document.getElementById('pac-input').value;
+            } else {
+              user_input = places[0].formatted_address;
             }
+            // console.log(places);
+            // console.log(user_input);
+            // Event - Calculate how many unique user had access the map
+            fire_events("wcmap_search", "search", {
+              'keyword': user_input,
+              'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+              'ts': Date.now()
+            });
 
             // Clear out the old markers.
             markers.forEach(function(marker) {
@@ -291,32 +623,45 @@
 
         
           // Create the search box and link it to the UI element.
-          var poi_choice = document.getElementById('screen-selector');
-          poi_choice.addEventListener("click", function (event) {
+          var poi_choice = document.querySelectorAll('.screen-selector');
+          for (var i=0; i<poi_choice.length; i++) {
+            poi_choice[i].addEventListener("click", function (event) {
               if (event.target !== event.currentTarget) {
-                  setScope("btn-id", event.target.id);
+                  setScope("btn-id", event.target.name);
 
                   // Button style
                   var pre_active = document.querySelector(".active");
                   if (pre_active) pre_active.classList.toggle("active");
-                  event.target.parentNode.classList.toggle("active");
+                  var target_btn = document.querySelector("#scrollmenu a[name="+event.target.name+"]");
+                  target_btn.parentNode.classList.toggle("active");
                   map.panTo(temp_coord);
                   map.setZoom(temp_zoom);
+
+                  if (hamburger.classList.contains("open")){
+                      hamburger.classList.toggle("open");
+                      document.getElementById("myNav").style.height = "0%";
+                  } 
               }
               event.stopPropagation();
           }, false);
+          }         
         }
 
         function setScope(key, district) {
           var i = findWithAttr(district_data, key, district);
-          current_district = district_data[i]['anchor'];
-          temp_coord = {
-              lat: (isMobile) ? district_data[i]['mlat'] : district_data[i]['lat'],
-              lng: (isMobile) ? district_data[i]['mlng'] : district_data[i]['lng']
-              }            
-          temp_zoom = (isMobile) ? district_data[i]['mzoom'] : district_data[i]['zoom'];
-          temp_zoom = (temp_zoom != "") ? temp_zoom : 17;
-          console.log(current_district + " | " + temp_coord.lat + "," + temp_coord.lng + " | " + temp_zoom);
+          if (i > -1) {
+            current_district = district_data[i]['anchor'];
+            temp_coord = {
+                lat: (isMobile) ? district_data[i]['mlat'] : district_data[i]['lat'],
+                lng: (isMobile) ? district_data[i]['mlng'] : district_data[i]['lng']
+                }            
+            temp_zoom = (isMobile) ? district_data[i]['mzoom'] : district_data[i]['zoom'];
+            temp_zoom = (temp_zoom != "") ? temp_zoom : 17;
+            console.log(current_district + " | " + temp_coord.lat + "," + temp_coord.lng + " | " + temp_zoom);
+          } else {
+            console.log("Wrong anchor, redirect to all");
+            current_district = "all";
+          }
         }
 
         function copyToClipboard() {
@@ -330,13 +675,20 @@
           document.execCommand("copy");
           alert("你已複製: " + el.value);
           document.body.removeChild(el);
-      }
+        }
+
+        function removehash(string) {
+          return string.replace("#", "");
+        }
 
       </script>
       <script src="src/fireEvent.js"></script>
       <script src="src/markerclusterer.js"></script>
       <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY8m0DgOQR3CsKGxULgswQMNSN9RRyKpo&callback=init&language=zh-TW&region=HK&libraries=places"></script>
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY8m0DgOQR3CsKGxULgswQMNSN9RRyKpo&language=zh-TW&region=HK&libraries=places"></script>
+<!--       <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY8m0DgOQR3CsKGxULgswQMNSN9RRyKpo&callback=init&language=zh-TW&region=HK&libraries=places"></script> -->
+      <!-- AIzaSyA_O-4Lg8mgL-w9LlI2v7LHQHYEulde3Oc -->
     </div>
   </body>
 </html>

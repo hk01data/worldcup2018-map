@@ -30,7 +30,7 @@ district_data = [
     "zoom": "",
     "mlat": 22.299375,
     "mlng": 114.175134,
-    "mzoom": ""
+    "mzoom": 16
   },
   {
     "anchor": "wanchai",
@@ -41,7 +41,7 @@ district_data = [
     "zoom": 18,
     "mlat": 22.277721,
     "mlng": 114.172406,
-    "mzoom": 17
+    "mzoom": 16
   },
   {
     "anchor": "causewaybay",
@@ -52,7 +52,7 @@ district_data = [
     "zoom": "",
     "mlat": 22.278375,
     "mlng": 114.182079,
-    "mzoom": ""
+    "mzoom": 16
   },
   {
     "anchor": "central",
@@ -63,7 +63,7 @@ district_data = [
     "zoom": "",
     "mlat": 22.282615,
     "mlng": 114.153344,
-    "mzoom": ""
+    "mzoom": 16
   },
   {
     "anchor": "sheungwan",
@@ -74,7 +74,7 @@ district_data = [
     "zoom": "",
     "mlat": 22.285057,
     "mlng": 114.147261,
-    "mzoom": ""
+    "mzoom": 16
   },
   {
     "anchor": "kwuntong",
@@ -85,7 +85,7 @@ district_data = [
     "zoom": "",
     "mlat": 22.313683,
     "mlng": 114.221671,
-    "mzoom": ""
+    "mzoom": 16
   },
   {
     "anchor": "tsuenwan",
@@ -96,6 +96,6 @@ district_data = [
     "zoom": "",
     "mlat": 22.371299,
     "mlng": 114.115029,
-    "mzoom": 17
+    "mzoom": 16
   }
 ];
