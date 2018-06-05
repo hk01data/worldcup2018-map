@@ -5,150 +5,90 @@
     "type": "Feature",
     "geometry": {
        "type": "Point",
-       "coordinates":  [ 114.16445,22.27758 ]
+       "coordinates":  [ 114.173922,22.272771 ]
     },
     "properties": {
-    "ID":578,
-    "銀行牌子":"東亞銀行",
-    "18區":"中西區",
-    "sub區":"中上環",
-    "我們的分類":"服務中心",
-    "address":"金鐘金鐘道88號太古廣場355號舖"
+    "id":1,
+    "date":"6月15日",
+    "weekday":"五",
+    "time":"晚上8時",
+    "match":"埃及 VS 烏拉圭",
+    "partner":"聖雅各福群會",
+    "district":"灣仔",
+    "address":"明華堂",
+    "datetime":"2018/6/15  20:00:00"
     }
   },
   {
     "type": "Feature",
     "geometry": {
        "type": "Point",
-       "coordinates":  [ 114.202999,22.331241 ]
+       "coordinates":  [ 113.944152,22.290497 ]
     },
     "properties": {
-    "ID":582,
-    "銀行牌子":"東亞銀行",
-    "18區":"九龍城區",
-    "sub區":"九龍城",
-    "我們的分類":"服務中心",
-    "address":"九龍城承啟道28號晴朗商場地下B008號舖"
+    "id":2,
+    "date":"6月16日",
+    "weekday":"六",
+    "time":"晚上9時",
+    "match":"阿根廷 VS 冰島",
+    "partner":"東涌灣岸康樂會",
+    "district":"離島",
+    "address":"東涌社區會堂",
+    "datetime":"2018/6/16  21:00:00"
     }
   },
   {
     "type": "Feature",
     "geometry": {
        "type": "Point",
-       "coordinates":  [ 114.004687,22.448281 ]
+       "coordinates":  [ 113.962056,22.374795 ]
     },
     "properties": {
-    "ID":663,
-    "銀行牌子":"東亞銀行",
-    "18區":"元朗區",
-    "sub區":"天水圍",
-    "我們的分類":"服務中心",
-    "address":"天水圍天水圍港鐵站41號舖"
+    "id":3,
+    "date":"6月16日",
+    "weekday":"六",
+    "time":"晚上9時",
+    "match":"阿根廷 VS 冰島",
+    "partner":"蝴蝶邨居民服務協會",
+    "district":"屯門",
+    "address":"房屋署場地",
+    "datetime":"2018/6/16  21:00:00"
     }
   },
   {
     "type": "Feature",
     "geometry": {
        "type": "Point",
-       "coordinates":  [ 114.225464,22.310726 ]
+       "coordinates":  [ 114.187593,22.384006 ]
     },
     "properties": {
-    "ID":773,
-    "銀行牌子":"恒生銀行",
-    "18區":"觀塘區",
-    "sub區":"觀塘",
-    "我們的分類":"服務中心",
-    "address":"開源道64號源成中心地下"
+    "id":4,
+    "date":"6月19日",
+    "weekday":"二",
+    "time":"晚上8時",
+    "match":"哥倫比亞 VS 日本",
+    "partner":"沙田青年權益會",
+    "district":"沙田",
+    "address":"排頭村空地",
+    "datetime":"2018/6/19  20:00:00"
     }
   },
   {
     "type": "Feature",
     "geometry": {
        "type": "Point",
-       "coordinates":  [ 114.191164,22.383234 ]
+       "coordinates":  [ 114.230525,22.312594 ]
     },
     "properties": {
-    "ID":862,
-    "銀行牌子":"恒生銀行",
-    "18區":"沙田區",
-    "sub區":"沙田",
-    "我們的分類":"服務中心",
-    "address":"橫壆街1-15號好運中心3樓72A-C及73號舖"
-    }
-  },
-  {
-    "type": "Feature",
-    "geometry": {
-       "type": "Point",
-       "coordinates":  [ 114.184057,22.280209 ]
-    },
-    "properties": {
-    "ID":900,
-    "銀行牌子":"恒生銀行",
-    "18區":"灣仔區",
-    "sub區":"銅鑼灣",
-    "我們的分類":"服務中心",
-    "address":"港鐵銅鑼灣（東）站大堂"
-    }
-  },
-  {
-    "type": "Feature",
-    "geometry": {
-       "type": "Point",
-       "coordinates":  [ 114.157926,22.282614 ]
-    },
-    "properties": {
-    "ID":972,
-    "銀行牌子":"恒生銀行",
-    "18區":"中西區",
-    "sub區":"中上環",
-    "我們的分類":"服務中心",
-    "address":"港鐵中環站（環球大廈）大堂"
-    }
-  },
-  {
-    "type": "Feature",
-    "geometry": {
-       "type": "Point",
-       "coordinates":  [ 114.197573,22.373487 ]
-    },
-    "properties": {
-    "ID":1327,
-    "銀行牌子":"中國銀行",
-    "18區":"沙田區",
-    "sub區":"沙田",
-    "我們的分類":"服務中心",
-    "address":"新界沙田博泉街1號水泉澳邨水泉澳廣場2樓208號舖"
-    }
-  },
-  {
-    "type": "Feature",
-    "geometry": {
-       "type": "Point",
-       "coordinates":  [ 114.111817,22.3754075 ]
-    },
-    "properties": {
-    "ID":1444,
-    "銀行牌子":"中國銀行",
-    "18區":"荃灣區",
-    "sub區":"",
-    "我們的分類":"服務中心",
-    "address":"荃灣青山道398號愉景新城2033舖"
-    }
-  },
-  {
-    "type": "Feature",
-    "geometry": {
-       "type": "Point",
-       "coordinates":  [ 114.0166,22.29554 ]
-    },
-    "properties": {
-    "ID":1539,
-    "銀行牌子":"中國銀行",
-    "18區":"離島區",
-    "sub區":"",
-    "我們的分類":"服務中心",
-    "address":"新界大嶼山愉景灣愉景廣場C座地下G28號舖"
+    "id":5,
+    "date":"6月19日",
+    "weekday":"二",
+    "time":"晚上8時",
+    "match":"哥倫比亞 VS 日本",
+    "partner":"翠樂陽光居民協會",
+    "district":"觀塘",
+    "address":"翠屏南邨翠櫻樓旁籃球場",
+    "datetime":"2018/6/19  20:00:00"
     }
   }
 ]
