@@ -1,3 +1,24 @@
+// Function to get anonymous_id from cookie
+function getAnonymousId(){
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  
+  if(document.cookie.match(/hk01_annonymous_id/)){
+    return(document.cookie.match(/hk01_annonymous_id=(.*?);/)[1])
+  }else{
+    var temp_uid = s4() + s4() + "-" + s4() + "-" + s4() + "-" + s4() + "-" + s4() + s4() + s4();
+    var d = new Date();
+    d.setTime(d.getTime() + (3650*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = "hk01_annonymous_id=" + temp_uid + ";" + expires + 
+      ";path=/;domain=." + window.location.host.match(/([^\.]+(\.[^\.]+)?)$/)[1];
+    return(temp_uid);
+  }
+}
+
 // Initialize the tracker client
 var myTracker = new trackerClient({
   GA: {
@@ -6,7 +27,7 @@ var myTracker = new trackerClient({
     Piwik: {
       trackingUrl: "https://track.hktester.com/v1web/piwik.php",  // replace with your piwik tracking url
       siteId: 5,  // replace with your piwik site ID
-      userId: "user-ID", // replace with user ID, should be same as MEMBER_ID/ANONYMOUS_ID
+      userId: getAnonymousId(), // replace with user ID, should be same as MEMBER_ID/ANONYMOUS_ID
       isSPA: true // if the page is single page application
     }
 }, false);

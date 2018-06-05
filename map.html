@@ -162,7 +162,7 @@
           fire_events("wcmap_landing", "view", {
             'start_location': current_district,
             'related_article': 163141,
-            'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+            'anonymous_id': getAnonymousId(),
             'ts': Date.now()
           });
         });
@@ -282,7 +282,7 @@
           //     // Event - User click the location on menu bar
           //     fire_events("wcmap_menu", "click", {
           //       'location': current_district,
-          //       'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+          //       'anonymous_id': getAnonymousId(),
           //       'ts': Date.now()
           //     });
 
@@ -299,7 +299,7 @@
               // Event - User click the share button of the page
               fire_events("wcmap_share", "share", {
                 'share_channel': this.className,
-                'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+                'anonymous_id': getAnonymousId(),
                 'ts': Date.now()
               });
             });
@@ -317,7 +317,7 @@
                   'rest_name': name,
                   'rest_lat': lat,
                   'rest_lon': lng,
-                  'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+                  'anonymous_id': getAnonymousId(),
                   'ts': Date.now()
                 }
               } else if (cat == "wcmap_event_marker") {
@@ -326,7 +326,7 @@
                   'event_name': name,
                   'event_lat': lat,
                   'event_lon': lng,
-                  'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+                  'anonymous_id': getAnonymousId(),
                   'ts': Date.now()
                 }
               }
@@ -518,7 +518,7 @@
                   'rest_name': share_info,
                   'rest_lat': marker_lat,
                   'rest_lon': marker_lng,
-                  'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+                  'anonymous_id': getAnonymousId(),
                   'ts': Date.now()
                 });
 
@@ -606,7 +606,7 @@
                 'event_name': share_info,
                 'event_lat': event_lat,
                 'event_lon': event_lng,
-                'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+                'anonymous_id': getAnonymousId(),
                 'ts': Date.now()
               });
 
@@ -622,7 +622,7 @@
                   'event_name': share_info,
                   'event_lat': event_lat,
                   'event_lon': event_lng,
-                  'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+                  'anonymous_id': getAnonymousId(),
                   'ts': Date.now()
                 });
               })
@@ -677,7 +677,7 @@
             // Event - Calculate how many unique user had access the map
             fire_events("wcmap_search", "search", {
               'keyword': user_input,
-              'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
+              'anonymous_id': getAnonymousId(),
               'ts': Date.now()
             });
 
@@ -744,16 +744,16 @@
                     target_btn.classList.toggle("active"); 
 
 //////////////////////////////////
-
-              // Event - User click the location on menu bar
-              fire_events("wcmap_menu", "click", {
-                'location': current_district,
-                'anonymous_id': (document.cookie.match(/hk01_annonymous_id/)) ? document.cookie.match(/hk01_annonymous_id=(.*?);/)[1] : "",
-                'ts': Date.now()
-              });
-
-              // Pageview - Send the PV with modified link and dimension
+              
               setTimeout(function(){
+                // Event - User click the location on menu bar
+                fire_events("wcmap_menu", "click", {
+                  'location': current_district,
+                  'anonymous_id': getAnonymousId(),
+                  'ts': Date.now()
+                }, {}, fire_custom_url(removehash(window.location.href)));
+                
+                // Pageview - Send the PV with modified link and dimension
                 fire_custom_url(removehash(window.location.href));
               }, 5);
 
