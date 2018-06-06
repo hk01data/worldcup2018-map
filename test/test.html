@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta charset="utf-8">
+
+     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+     <!-- Font Awesome Free -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+
+    <link rel="stylesheet" href="src/style_test.css" crossorigin="anonymous">
+ 
+    <script type="text/javascript" src="src/districts.js"></script>
+  </head>
+  <body>
+    <div id="bigcontainer">
+      <div id="header">
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+    </ul>
+    <form class="form-inline">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <input id="pac-input" class="form-control" type="text" placeholder="搜尋餐廳">
+        <ul class="scrollmenu" id="screen-selector">
+<li><a href="#mongkok" id="nav-btn" onclick="openNav()">&#9776;</a></li>          
+<li><a href="#mongkok" id="kl-mk-btn">旺角</a></li><li><a href="#princeedward" id="kl-pw-btn">太子</a></li><li><a href="#tsimshatsui" id="kl-tst-btn">尖沙咀</a></li><li><a href="#wanchai" id="hk-wc-btn">灣仔</a></li><li><a href="#causewaybay" id="hk-cwb-btn">銅鑼灣</a></li><li><a href="#central" id="hk-ct-btn">中環</a></li><li><a href="#sheungwan" id="hk-sw-btn">上環</a></li><li><a href="#kwuntong" id="kl-kt-btn">觀塘</a></li><li><a href="#tsuenwan" id="nt-tw-btn">荃灣</a></li>
+
+
+
+        </ul>
+      </div>
+      <div id="myNav" class="overlay">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div class="overlay-content">
+          <a href="#mongkok"  class="btn btn-primary btn-sm" id="kl-mk-btn" onclick="closeNav()">旺角</a>
+          <a href="#princeedward" class="btn btn-primary btn-sm" id="kl-pw-btn" onclick="closeNav()">太子</a>
+          <a href="#tsimshatsui" class="btn btn-primary btn-sm" id="kl-tst-btn" onclick="closeNav()">尖沙咀</a>
+        </div>
+      </div>
+      <div id="map"></div>
+
+<script>
+
+function openNav() {
+    document.getElementById("myNav").style.width = "100%";
+}
+
+function closeNav() {
+    document.getElementById("myNav").style.width = "0%";
+}
+
+function checkScreenWidth(x) {
+    if (x.matches) { // If media query matches
+        document.body.style.backgroundColor = "yellow";
+    } else {
+        document.body.style.backgroundColor = "pink";
+    }
+}
+
+var watchWidth = window.matchMedia("(max-width: 576px)")
+checkScreenWidth(watchWidth) // Call listener function at run time
+watchWidth.addListener(checkScreenWidth) // Attach listener function on state changes
+
+        var current_district = "all";
+        var temp_zoom;
+        var temp_coord;
+        var screen_width;
+
+        function init(){
+          detectBrowser();
+          init_district();
+          console.log("Current district: " + current_district);
+          if (current_district != "all") setScope("anchor", current_district);
+          //populateHeader(district_data);
+          initMap();
+        }
+
+
+        function findWithAttr(array, attr, value) {
+              for(var i = 0; i < array.length; i += 1) {
+                  if(array[i][attr] === value) {
+                      return i;
+                  }
+              }
+              return -1;
+          }
+
+        function detectBrowser() {
+          var useragent = navigator.userAgent;
+          var mapdiv = document.getElementById("map");
+          console.log("Screen width: " + screen.width);
+          screen_width = screen.width;
+
+          if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1 ) {
+            mapdiv.style.width = '100%';
+            mapdiv.style.height = '100%';
+          } 
+        }
+
+        // function populateHeader(jsonObj) {
+        //   navbar = document.querySelector(".scrollmenu");
+        //   var districts = jsonObj;
+        //    for (var i = 0; i < districts.length; i++) { 
+        //       var listItem = document.createElement('li');
+        //       var ahref = document.createElement("a");
+        //       ahref.textContent = districts[i].display_name;
+        //       ahref.setAttribute("href", '#'+districts[i]["anchor"]);
+        //       ahref.setAttribute("id", districts[i]["btn-id"]);
+        //       navbar.appendChild(listItem);
+        //       listItem.appendChild(ahref);
+        //       if (current_district == districts[i]["anchor"]) listItem.setAttribute("class", "active");
+        //     }
+        // }
+
+        // Set Entry District 
+        function init_district() {
+          var linkText = window.location.href;
+          console.log("url: "+linkText);
+          if (linkText.match(/#/)) current_district = linkText.match(/#(.*)/)[1];
+        }
+      
+        // Create Google Map
+        function initMap() {
+          var hk = {lat: 22.3750568, lng: 114.1050191}; //{lat: 22.3750568, lng: 114.1050191}; 
+          var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 12, 
+            minZoom: 11.5,
+            center: hk,
+            mapTypeControl: false,
+            streetViewControl: false,
+            gestureHandling: "greedy"
+          });
+
+          // Onload
+          if (current_district != "all") {
+            map.panTo(temp_coord);
+            map.setZoom(temp_zoom);
+          } else
+          {
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
+                };
+                map.setCenter(pos);
+              }, function() {
+                console.log("GPS Located");
+              });
+            } else {
+              // Browser doesn't support Geolocation
+              console.log("Browser doesn't support Geolocation");
+            }
+          }
+
+          // Load GeoJSON.
+          map.data.loadGeoJson('src/restaurant.json', null, function(features) {
+              // group items / cluster
+          var infoWin = new google.maps.InfoWindow();
+          var markers = features.map(function(feature) {
+              var g = feature.getGeometry();
+
+              var marker = new google.maps.Marker({
+                  'position': g.get(0),
+                  'data' : feature,
+                  'icon' : 'markerclusterer/m1.png'
+              });
+            google.maps.event.addListener(marker, 'click', function(evt) {
+              var info_name = marker.data.f.name;
+              var info_address = marker.data.f.address;
+              var info_phone = marker.data.f.phone;
+              var info_opening_hour = marker.data.f.opening_hour;
+              var info_play_schedule = marker.data.f.play_schedule;
+              var info_reservation = marker.data.f.reservation;
+              var info_min_charge = marker.data.f.min_charge;
+              var info_special_event = marker.data.f.special_event;
+
+              var share_info = info_name + ' | ' + info_address;
+              console.log(share_info);
+              var content = "<div id='iw-container'>"+
+              "<h6>"+info_name+"</h6>"+
+                "<div class='info-content'>"+
+                  "<dl class='row'>"+
+                    "<dt class='col-1'><i class='fas fa-map-marker-alt'></i></dt><dd class='col-11'>"+info_address+"</dd>"+
+                    "<dt class='col-1'><i class='fas fa-phone'></i></dt><dd class='col-11'>"+info_phone+"</dd>"+
+                    "<dt class='col-1'><i class='far fa-clock'></i></dt><dd class='col-11'>"
+              if (info_opening_hour) content += info_opening_hour;
+              else content += "未有提供營業時間";
+                 content += "</dd>"+
+                    "<dt class='col-1'><i class='fas fa-calendar-alt'></i></dt><dd class='col-11'>播放場次："
+              if (info_play_schedule) content += info_play_schedule;
+              else content += "未有提供";
+                 content += "</dd>"+
+                    "<dt class='col-1'><i class='fas fa-phone-volume'></i></dt><dd class='col-11'>訂位："
+              if (info_reservation) content += info_reservation;
+              else content += "不用";
+                 content += "</dd>"+
+                    "<dt class='col-1'><i class='fas fa-dollar-sign'></i></dt><dd class='col-11'>最低消費："
+              if (info_min_charge) content += info_min_charge;
+              else content += "沒有";
+                content += "</dd></dl>"
+              if (info_special_event) content += info_special_event;
+                content += "</div><div id='share-button'>";
+              if (screen_width < 576)  content += "<a class='whatsapp' href='whatsapp://send?text="+share_info+"' target='_blank'>"+"<i class='fab fa-whatsapp'></i></a>";
+
+                content +=
+                  "<a class='twitter'  href='https://twitter.com/intent/tweet/?text="+share_info+"' target='_blank'>"+"<i class='fab fa-twitter'></i></a>"+
+                  "<a class='telegram'  href='https://telegram.me/share/url?url=https://bit.ly/hk01wc18map&text="+share_info+"' target='_blank'>"+"<i class='fab fa-telegram'></i></a>"+
+                  "<a class='copy' id='copyToClipboard' name = '"+ share_info +"' href='#' onclick=copyToClipboard()><i class='far fa-copy'></i></a>"+
+                "</div>"+
+              "</div>"
+              infoWin.setContent(content);
+              infoWin.open(map, marker);
+            })
+              return marker;
+          });
+
+          // create a new marker cluster
+          var markerCluster = new MarkerClusterer(map, markers, {
+                  imagePath: 'markerclusterer/m',
+                  gridSize: 50,
+                  //maxZoom: 16
+                  zoomOnClick: true
+              });
+          });
+
+          map.data.setStyle(function (feature) {
+              return { icon: feature.getProperty('icon'), visible: false };
+          });
+
+          // Set Bound
+          var bounds = new google.maps.LatLngBounds(
+            new google.maps.LatLng(22.152842, 113.831202),
+            new google.maps.LatLng(22.644851, 114.455809)
+            );
+
+          var lastValidCenter = map.getCenter();
+
+          map.addListener('center_changed', function() {
+              if (!bounds.contains(map.getCenter())) {
+                  map.panToBounds(bounds);
+              }
+          });
+
+        // This example adds a search box to a map, using the Google Place Autocomplete
+        // feature. People can enter geographical searches. The search box will return a
+        // pick list containing a mix of places and predicted search terms.
+
+        // This example requires the Places library. Include the libraries=places
+        // parameter when you first load the API. For example:
+        // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+          // Create the search box and link it to the UI element.
+          var input = document.getElementById('pac-input');
+          var searchBox = new google.maps.places.SearchBox(input, {bounds: bounds});
+
+          var markers = [];
+
+          // Listen for the event fired when the user selects a prediction and retrieve
+          // more details for that place.
+          searchBox.addListener('places_changed', function() {
+            var places = searchBox.getPlaces();
+            if (places.length == 0) {
+              return;
+            }
+
+            // Clear out the old markers.
+            markers.forEach(function(marker) {
+              marker.setMap(null);
+              console.log("Clear out the old markers");
+            });
+            markers = [];
+
+            var bounds = new google.maps.LatLngBounds();
+            // For each place, get the icon, name and location.
+            places.forEach(function(place) {
+              if (!place.geometry) {
+                console.log("Returned place contains no geometry");
+                return;
+              }
+              var icon = {
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(25, 25)
+              };
+
+              // Create a marker for each place.
+              markers.push(new google.maps.Marker({
+                map: map,
+                icon: icon,
+                title: place.name,
+                position: place.geometry.location
+              }));
+
+              if (place.geometry.viewport) {
+                // Only geocodes have viewport.
+                bounds.union(place.geometry.viewport);
+              } else {
+                bounds.extend(place.geometry.location);
+              }
+            });
+            map.fitBounds(bounds);
+          });
+
+        
+          // Create the search box and link it to the UI element.
+          var poi_choice = document.getElementById('screen-selector');
+          poi_choice.addEventListener("click", function (event) {
+                if (event.target !== event.currentTarget) {
+                    setScope("btn-id", event.target.id);
+
+                    // Button style
+                    var pre_active = document.querySelector(".active");
+                    if (pre_active) pre_active.classList.toggle("active");
+                    event.target.parentNode.classList.toggle("active");
+                    map.panTo(temp_coord);
+                    map.setZoom(temp_zoom);
+                }
+                event.stopPropagation();
+            }, false);
+
+
+var poi_choice_inNav = document.getElementById('myNav');
+poi_choice_inNav.addEventListener("click", function (event) {
+                if (event.target !== event.currentTarget) {
+                    setScope("btn-id", event.target.id);
+                    map.panTo(temp_coord);
+                    map.setZoom(temp_zoom);
+                }
+                event.stopPropagation();
+            }, false);
+
+          }
+        function setScope(key, district) {
+          var i = findWithAttr(district_data, key, district);
+          current_district = district_data[i]['anchor'];
+          temp_coord = {
+              lat: (screen_width > 576) ? district_data[i]['lat'] : district_data[i]['mlat'],
+              lng: (screen_width > 576) ? district_data[i]['lng'] : district_data[i]['mlng']
+              }            
+          temp_zoom = (screen_width > 576) ? district_data[i]['zoom'] : district_data[i]['mzoom'];
+          temp_zoom = (temp_zoom != "") ? temp_zoom : 17;
+          console.log(current_district + " | " + temp_coord.lat + "," + temp_coord.lng + " | " + temp_zoom);
+        }
+
+        function copyToClipboard() {
+          const el = document.createElement('textarea');
+          el.value = document.getElementById("copyToClipboard").getAttribute("name");
+          el.setAttribute('readonly', '');
+          el.style.position = 'absolute';
+          el.style.left = '-9999px';
+          document.body.appendChild(el);
+          el.select();
+          document.execCommand("copy");
+          alert("你已複製: " + el.value);
+          document.body.removeChild(el);
+      }
+
+</script>
+
+      <script src="src/markerclusterer.js"></script>
+      <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY8m0DgOQR3CsKGxULgswQMNSN9RRyKpo&callback=init&region=zh-TW&libraries=places"></script>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,403 @@
+      .pending_change {
+        background: red;
+        color: #fff;
+      }
+
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        position: relative;
+        flex: 1;
+      }
+
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f7f7;
+        /*overflow: hidden;*/
+
+      }
+
+      #bigcontainer {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+      }
+
+      #header {
+        width: 100%;
+        position: relative;
+        /*z-index: 100;*/
+      }
+
+      #header .form-group {
+        margin: 0;
+      }
+
+      .gm-style-iw {
+        max-width: 250px;
+      }
+
+      .gm-style-iw div {
+        overflow-x: hidden;
+      }
+
+      #iw-container {
+        background: url("../images/hk01watermark.png") no-repeat center;
+        background-size: 132px 80px;
+        padding-top: 10px;
+      }
+
+      #iw-container .container {
+        padding: 0;
+      }
+
+
+      .fa-ul {
+          margin-left: 2em !important;
+          line-height: 22px;
+        }
+
+      .fa-li {
+          top: 50%;
+          transform: translate(0, -50%);
+          width: 1em !important;
+        }
+
+      #pac-input,#pac-input:focus {
+        font-size: 16px
+        height: 26px;
+        margin: 5px 0 5px 0;
+        padding: 0 0 0 6px;
+      }
+
+      #pac-input, .input-group-addon {
+        background-color: transparent;
+       }
+
+      #pac-input, #pac-input:focus, .input-group-addon {
+        box-shadow: none;
+      }
+
+      #pac-input:focus {
+        background-color: white;
+      }
+
+      .input-group .fa, .input-group .fas {
+        font-weight: 900;
+        font-size: 16px;
+        margin: 10px;
+        color: gray;
+      }
+
+      #nav-bar {
+          /*background-color: #0f4583;*/
+          background-color: #0087e6;
+          /*border-bottom: 5px solid #a21b1f;*/
+          margin: 0;
+          padding: 0;
+      }
+
+      .burger {
+        padding: 3px 0 3px 10px;
+      }
+
+      #nav-icon {
+        width: 16px;
+        height: 24px;
+        position: relative;
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+        -webkit-transition: .3s ease-in-out;
+        -moz-transition: .3s ease-in-out;
+        -o-transition: .3s ease-in-out;
+        transition: .3s ease-in-out;
+        cursor: pointer;
+      }
+
+      #nav-icon span {
+        display: block;
+        position: absolute;
+        height: 2px;
+        width: 100%;
+        background: #ffffff;
+        border-radius: 9px;
+        opacity: 1;
+        left: 0;
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+        -webkit-transition: .15s ease-in-out;
+        -moz-transition: .15s ease-in-out;
+        -o-transition: .15s ease-in-out;
+        transition: .15s ease-in-out;
+      }
+
+      #nav-icon span:nth-child(1) {
+        top: 6px;
+      }
+
+      #nav-icon span:nth-child(2),#nav-icon span:nth-child(3) {
+        top: 12px;
+      }
+
+      #nav-icon span:nth-child(4) {
+        top: 18px;
+      }
+
+      #nav-icon.open span:nth-child(1) {
+        top: 12px;
+        width: 0%;
+        left: 50%;
+      }
+
+      #nav-icon.open span:nth-child(2) {
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+      }
+
+      #nav-icon.open span:nth-child(3) {
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+      }
+
+      #nav-icon.open span:nth-child(4) {
+        top: 12px;
+        width: 0%;
+        left: 50%;
+      }
+
+      .overlay {
+/*        position: absolute;
+        top:69px;*/
+        color: white;
+        margin:0;
+        height: 0%;
+        width: 100%;
+/*        z-index: 10000;*/
+        background-color: #343a40; 
+        overflow-y: auto;
+        transition: 0.3s;
+      }
+
+/*      (min-width: 576px) {
+        .overlay {
+          overflow-y: hidden;
+        }
+*/
+
+      .overlay h5 {
+        font-size: 16px;
+        margin: 15px 0 8px;
+      }
+
+      .overlay-content {
+        top: 20px; 
+        margin: 0 auto;
+        position: relative;
+        background-color: #343a40;
+        max-width: 576px;
+        /*padding-bottom: 500px;*/
+      }
+
+      .overlay a {
+/*          text-decoration: none;
+          color: #818181;
+          display: inline;*/
+          transition: 0.3s;
+      }
+
+      .overlay a:hover, .overlay a:focus {
+/*          color: #f1f1f1;*/
+      }
+
+      .overlay .row{
+        margin-bottom: 5px;
+        padding: 0 10px;
+      }
+
+      .overlay .col {
+        padding: 0 5px;
+      }
+
+      #overlay-footer {
+        position: relative;
+        margin-top: 10px;
+        border-top: 10px solid #eda915; 
+        padding-top: 30px;
+        padding-bottom: 20%;
+        background-color: #0b318f;
+        text-align: center;
+        height: 100%
+      }
+
+      #overlay-footer .copyright {
+        margin-top: 10px;
+        color: white; 
+      }
+
+      #nav-share-button {
+        margin: 0 0 10px 0;
+        padding: 20px 0;
+        margin-bottom: 20px;
+        width: 100%;
+        text-align: center;
+        cursor: pointer;
+      }
+
+      #nav-share-button a {
+          width: 50px;
+          height: 50px;
+          display: inline-block;
+          margin: 0 4px;
+          border-radius: 50%;
+          font-size: 25px;
+          color: #fff;
+          transition: opacity 0.15s linear;
+      }
+
+
+      #nav-share-button a:hover {
+        opacity: 0.5;
+      }
+
+      /* icons */
+
+      #nav-share-button i {
+          position: relative;
+          top: 33.5%;
+          transform: translateY(-50%);
+      }
+
+      @media screen and (max-width: 330px) {
+        #nav-share-button a {
+            width: 40px;
+            height: 40px;
+            display: inline-block;
+            margin: 0 4px;
+            border-radius: 50%;
+            font-size: 20px;
+            color: #fff;
+          transition: opacity 0.15s linear;
+        }
+
+        #nav-share-button i {
+          position: relative;
+          top: 35%;
+          transform: translateY(-50%);
+        }
+      }
+
+      #scrollmenu {
+          overflow-x: auto;
+          white-space: nowrap;
+          margin: 0;
+          padding: 0;
+      }
+
+      #scrollmenu li {
+          display: inline-block;
+          padding: 3px 8px;
+          border-bottom: 3px solid transparent;
+      }
+
+      #scrollmenu li a {
+          color: white;
+          text-decoration: none;
+      }
+
+      #scrollmenu li:hover {
+          border-bottom: 3px solid white;
+      }      
+
+      #scrollmenu li.active {
+          border-bottom: 3px solid white;
+      }
+
+      /* width */
+      ::-webkit-scrollbar {
+          height: 3px;
+      }
+
+      /* Track */
+      ::-webkit-scrollbar-track {
+          background: #888; 
+      }
+       
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+          background: #666; 
+      }
+
+      /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+          background: #555; 
+      }
+
+      .pac-item {
+        padding: 2px 0;
+      }
+
+      #share-button {
+        margin-top: 5px;
+        width: 100%;
+        text-align: center;
+      }
+
+      #share-button a {
+          width: 40px;
+          height: 40px;
+          display: inline-block;
+          margin: 0 4px;
+          border-radius: 50%;
+          font-size: 22px;
+          color: #fff;
+/*        opacity: 0.75;*/
+        transition: opacity 0.15s linear;
+      }
+
+
+
+      #share-button a:hover {
+        opacity: 0.5;
+      }
+
+      /* icons */
+
+      #share-button i {
+          position: relative;
+          top: 46%;
+          transform: translateY(-50%);
+      }
+
+      /* colors */
+
+      .whatsapp {
+        background: #00e676;
+      }
+
+      .facebook {
+        background: #3b5998;
+      }
+
+      .twitter {
+        background: #55acee;
+      }
+
+      .telegram {
+        background: #0088cc;
+      }
+      .copy {
+        background: #666666;
+      }
