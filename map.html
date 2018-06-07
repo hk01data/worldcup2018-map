@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -156,7 +155,6 @@
           navShareBtnListener();
           initMap();
 
-
           // Pageview - Original Page View send to both Piwik and Google Analytics
           fire_custom_url(removehash(window.location.href)); 
 
@@ -227,7 +225,7 @@
               var ahref = document.createElement("a");
               ahref.textContent = districts[j].display_name;
               ahref.setAttribute("href", "#"+districts[j].anchor);
-              ahref.setAttribute("name", districts[j]["btn-id"]);
+              ahref.setAttribute("name", districts[j]["anchor"]);
               ahref.classList.toggle("wcmap_menu");
               navbar.appendChild(listItem);
               listItem.appendChild(ahref);
@@ -258,7 +256,7 @@
                 if (j*3+l < districts.length) {
                   ahref.textContent = districts[j*3+l].display_name;
                   ahref.setAttribute("href", "#"+districts[j*3+l].anchor);
-                  ahref.setAttribute("name", districts[j*3+l]["btn-id"]);
+                  ahref.setAttribute("name", districts[j*3+l]["anchor"]);
                   ahref.setAttribute("role", "button");
                   ahref.classList.toggle("btn");
                   ahref.classList.toggle("btn-block");
@@ -310,7 +308,6 @@
                   'ts': Date.now()
                 }
               }
-
               // Event - User click the share button on events
               fire_events(cat, "share", temp_label);
             });
@@ -368,44 +365,41 @@
               position: google.maps.ControlPosition.RIGHT_BOTTOM
             },
             styles: [
-  {
-    "featureType": "poi",
-    "elementType": "labels.text",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.business",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "road",
-    "elementType": "labels.icon",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "transit",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }
-]
-
-
-
+                      {
+                        "featureType": "poi",
+                        "elementType": "labels.text",
+                        "stylers": [
+                          {
+                            "visibility": "off"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "poi.business",
+                        "stylers": [
+                          {
+                            "visibility": "off"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "road",
+                        "elementType": "labels.icon",
+                        "stylers": [
+                          {
+                            "visibility": "off"
+                          }
+                        ]
+                      },
+                      {
+                        "featureType": "transit",
+                        "stylers": [
+                          {
+                            "visibility": "off"
+                          }
+                        ]
+                      }
+                    ]
           });
 
           // Onload
@@ -717,7 +711,7 @@
           for (var i=0; i<poi_choice.length; i++) {
             poi_choice[i].addEventListener("click", function (event) {
               if (event.target !== event.currentTarget) {
-                  setScope("btn-id", event.target.name);
+                  setScope("anchor", event.target.name);
 
                   // Button style
                   var pre_active = document.querySelectorAll(".active");
@@ -733,19 +727,19 @@
                   target_btn = document.querySelector("#navmenu a[name=" + event.target.name + "]");
                     target_btn.classList.toggle("active"); 
 
-              
+//             window.history.pushState("object or string", "Title", "#"+current_district);
               setTimeout(function(){
+
+                // Pageview - Send the PV with modified link and dimension
+                fire_custom_url(removehash(window.location.href));
+
                 // Event - User click the location on menu bar
                 fire_events("wcmap_menu", "click", {
                   'location': current_district,
                   'anonymous_id': getAnonymousId(),
                   'ts': Date.now()
                 }, {}, removehash(window.location.href));
-
-                // Pageview - Send the PV with modified link and dimension
-                fire_custom_url(removehash(window.location.href));
               }, 500);
-
 
                   map.panTo(temp_coord);
                   map.setZoom(temp_zoom);
